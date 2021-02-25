@@ -5,11 +5,11 @@
  */
 package ej13;
 
+import java.text.DecimalFormat;
 import java.util.Random;
 import java.util.Scanner;
 
 /**
- *
  * @author Mario
  */
 public class Ej13 {
@@ -20,14 +20,13 @@ public class Ej13 {
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
         Random r = new Random();
-        float nota;
+        double nota;
         do {
-            /*System.out.print("Introduce una nota:");
-            nota = scan.nextFloat();*/
-
-            nota = r.nextFloat() * 10;
+            System.out.print("Introduce una nota: ");
+            nota = r.nextDouble() * 10;
         } while (nota > 10 || nota < 0);
-        System.out.println("Nota válida: " + nota);
+        DecimalFormat df = new DecimalFormat("#0.00");
+        System.out.println("Nota válida: " + df.format(nota));
     }
 
 }
