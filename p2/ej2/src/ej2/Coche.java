@@ -19,12 +19,12 @@ public class Coche {
         MONOVOLUMEN, FAMILIAR, COMPACTO, BERLINA, CAMIONETA
     };
 
-    private final String marca;
-    private final String modelo;
-    private final int numPuertas;
-    private final double capacidad; // m^3
-    private final Tipo tipo;
-    private final int caballos;
+    private String marca;
+    private String modelo;
+    private int numPuertas;
+    private double capacidad; // m^3
+    private Tipo tipo;
+    private int caballos; // cv
 
     /**
      * Crea un vehículo asignando todos sus atributos
@@ -45,65 +45,91 @@ public class Coche {
         this.caballos = caballos;
     }
 
+    public Coche() {
+        this.marca = "";
+        this.modelo = "";
+        this.numPuertas = 0;
+        this.capacidad = 0;
+        this.tipo = Tipo.BERLINA;
+        this.caballos = 0;
+    }
+
     /**
-     * Devuelve la marca del coche
      *
-     * @return
+     * @return Devuelve la marca del coche
      */
     public String getMarca() {
         return marca;
     }
 
     /**
-     * Devuelve el modelo del coche
      *
-     * @return
+     * @return Devuelve el modelo del coche
      */
     public String getModelo() {
         return modelo;
     }
 
     /**
-     * Devuelve el número de puertas del coche
      *
-     * @return
+     * @return Devuelve el número de puertas del coche
      */
     public int getNumPuertas() {
         return numPuertas;
     }
 
     /**
-     * Devuelve la capacidad del maletero del coche en metros cúbicos
      *
-     * @return
+     * @return Devuelve la capacidad del maletero del coche en metros cúbicos
      */
     public double getCapacidad() {
         return capacidad;
     }
 
     /**
-     * Devuelve el tipo según el enumerado Tipo
      *
-     * @return
+     * @return Devuelve el tipo según el enumerado Tipo
      */
     public Tipo getTipo() {
         return tipo;
     }
 
     /**
-     * Devuelve los caballos en cv del coche
      *
-     * @return
+     * @return Devuelve los caballos en cv del coche
      */
     public int getCaballos() {
         return caballos;
     }
 
+    public void setMarca(String marca) {
+        this.marca = marca;
+    }
+
+    public void setModelo(String modelo) {
+        this.modelo = modelo;
+    }
+
+    public void setNumPuertas(int numPuertas) {
+        this.numPuertas = numPuertas;
+    }
+
+    public void setCapacidad(double capacidad) {
+        this.capacidad = capacidad;
+    }
+
+    public void setTipo(Tipo tipo) {
+        this.tipo = tipo;
+    }
+
+    public void setCaballos(int caballos) {
+        this.caballos = caballos;
+    }
+
     /**
-     * Devuelve el coche con el formato: "marca modelo (tipo, cv CV), numPuertas
-     * PUERTAS, MALETERO de capacidad METROS CÚBICOS"
      *
-     * @return
+     * @return Devuelve el coche con el formato: "marca modelo (tipo, cv CV),
+     * numPuertas PUERTAS, MALETERO de capacidad METROS CÚBICOS"
      */
     @Override
     public String toString() {

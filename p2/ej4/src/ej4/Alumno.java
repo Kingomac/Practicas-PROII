@@ -29,7 +29,6 @@ public class Alumno {
         BLOQUE_I, BLOQUE_II, BLOQUE_III, PROGRAMACION, PRACTICAS
     }
 
-    private static final int NUM_NOTAS = 5;
     private static final String LETRAS_DNI = "TRWAGMYFPDXBNJZSQVHLCKE";
 
     private final int dni;
@@ -42,7 +41,7 @@ public class Alumno {
         this.dni = dni;
         this.apellidos = apellidos;
         this.nombre = nombre;
-        this.notas = new double[NUM_NOTAS];
+        this.notas = new double[Nota.values().length];
     }
 
     public int getDni() {
