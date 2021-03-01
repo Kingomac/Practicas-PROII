@@ -1,6 +1,9 @@
 package ej4;
 
+import static ej4.LeerTeclado.leerNota;
+import static ej4.LeerTeclado.leerObligatorio;
 import java.text.DecimalFormat;
+import java.util.Scanner;
 
 /**
  *
@@ -28,6 +31,8 @@ public class Alumno {
     public static enum Nota {
         BLOQUE_I, BLOQUE_II, BLOQUE_III, PROGRAMACION, PRACTICAS
     }
+    private static final double[] ponderaciones = new double[]{0.15, 0.15, 0.15,
+        0.3, 0.25};
 
     private static final String LETRAS_DNI = "TRWAGMYFPDXBNJZSQVHLCKE";
 
@@ -36,6 +41,30 @@ public class Alumno {
     private final String nombre;
 
     private double[] notas;
+
+    public static Alumno leerAlumno() {
+        int dni;
+        String apellidos;
+        String nombre;
+        Alumno toret;
+        Scanner entrada = new Scanner(System.in);
+        System.out.println("Introduce los datos de un alumno: ");
+        do {
+            System.out.print("\tDNI: ");
+            try {
+                dni = Integer.parseInt(entrada.nextLine());
+            } catch (NumberFormatException exc) {
+                dni = 0;
+            }
+        } while (dni > 100000000);
+        apellidos = leerObligatorio("\tApellidos: ");
+        nombre = leerObligatorio("\tNombre: ");
+        toret = new Alumno(dni, apellidos, nombre);
+        for (Alumno.Nota n : Alumno.Nota.values()) {
+            toret.setNota(n, leerNota("\tNota " + n + ": "));
+        }
+        return toret;
+    }
 
     public Alumno(int dni, String apellidos, String nombre) {
         this.dni = dni;
@@ -73,10 +102,10 @@ public class Alumno {
     public String calcularNotaFinal() {
         String toret;
         DecimalFormat df = new DecimalFormat("##.#");
-        double nota = getNota(Nota.BLOQUE_I) * 0.15 + getNota(Nota.BLOQUE_II)
-                * 0.15 + getNota(Nota.BLOQUE_III) * 0.15
-                + getNota(Nota.PROGRAMACION) * 0.3 + getNota(Nota.PRACTICAS)
-                * 0.25;
+        double nota = 0;
+        for (int i = 0; i < Nota.values().length; i++) {
+            nota += getNota(Nota.values()[i]) * ponderaciones[i];
+        }
         if (nota < 5) {
             toret = "suspenso(";
         } else if (nota >= 5 && nota < 7) {

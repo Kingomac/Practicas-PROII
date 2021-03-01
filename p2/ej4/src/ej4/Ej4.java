@@ -1,7 +1,5 @@
 package ej4;
 
-import java.util.Scanner;
-
 /**
  *
  * @author Mario
@@ -28,32 +26,8 @@ public class Ej4 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Alumno n = leerAlumno();
+        Alumno n = Alumno.leerAlumno();
         System.out.println(n);
-    }
-
-    public static Alumno leerAlumno() {
-        Alumno toret;
-        int dni;
-        String apellidos;
-        String nombre;
-        Scanner scan = new Scanner(System.in);
-
-        System.out.println("Introduce los datos de un alumno:");
-        System.out.print("\tDNI: ");
-        dni = Integer.parseInt(scan.nextLine());
-        System.out.print("\tApellidos: ");
-        apellidos = scan.nextLine();
-        System.out.print("\tNombre: ");
-        nombre = scan.nextLine();
-        toret = new Alumno(dni, apellidos, nombre);
-
-        System.out.println("Introduce las notas:");
-        for (Alumno.Nota tipo : Alumno.Nota.values()) {
-            System.out.print("\t" + tipo + ": ");
-            toret.setNota(tipo, Double.parseDouble(scan.nextLine()));
-        }
-        return toret;
     }
 
 }
