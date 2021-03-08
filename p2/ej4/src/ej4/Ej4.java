@@ -26,7 +26,7 @@ public class Ej4 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Alumno n = Alumno.leerAlumno();
+        Alumno n = LeerTeclado.leerAlumno();
         System.out.println(n);
     }
 

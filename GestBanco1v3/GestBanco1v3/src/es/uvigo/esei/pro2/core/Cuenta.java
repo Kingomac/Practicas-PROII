@@ -1,34 +1,33 @@
 /*
  *  Definición de la clase Cuenta
- *  En un banco tendremos una serie de clientes con sus cuentas
+ *  En un banco tendremos una serie de clientes con sus cuentas bancarias
  */
 package es.uvigo.esei.pro2.core;
 
-/**
- *
- * @author nrufino
- */
 public class Cuenta {
 
     public static enum Tipo {
         AHORRO, CORRIENTE
     };
 
-    private String numCuenta; // Número de cuenta del cliente
-    private int ano;    // Año de apertura de la cuenta del cliente
-    private Tipo tipo; // Tipo de cuenta
+    private String numCuenta;   // Numero de cuenta
+    private int anhoApertura;   // Año de apertura de la cuenta
+    private Tipo tipo;
 
     /**
      * Crea una nueva cuenta del cliente, con sus datos: numero de cuenta, año
-     * de apertura
+     * de apertura y tipo de cuenta (ahorro o corriente)
      *
      * @param numCuenta número de cuenta del cliente
-     * @param anho el año de apertura de la cuenta del cliente
+     * @param anhoApertura el año de apertura de la cuenta del cliente
+     * @param ahorro si es una cuenta de ahorro
+     * @param corriente si es una cuenta corriente
      */
-    public Cuenta(String numCuenta, int anho) {
-        setNumCuenta(numCuenta);
-        setAno(anho);
-        setTipo(null);
+    public Cuenta(String numCuenta, int anhoApertura, Tipo tipo) {
+
+        this.numCuenta = numCuenta;
+        this.anhoApertura = anhoApertura;
+        this.tipo = tipo;
     }
 
     /**
@@ -55,8 +54,8 @@ public class Cuenta {
      * @return El valor como entero
      *
      */
-    public int getAno() {
-        return ano;
+    public int getAnho() {
+        return anhoApertura;
     }
 
     /**
@@ -64,37 +63,21 @@ public class Cuenta {
      *
      * @param ano El nuevo valor, como entero
      */
-    public void setAno(int ano) {
-        this.ano = ano;
+    public void setAnho(int ano) {
+        this.anhoApertura = ano;
     }
 
-    /**
-     * Devuelve el tipo de cuenta
-     *
-     * @return Tipo de cuenta
-     */
     public Tipo getTipo() {
         return tipo;
     }
 
-    /**
-     * Cambia el tipo de cuenta del cliente
-     *
-     * @param tipo Nuevo valor como Cuenta.Tipo.*
-     */
     public void setTipo(Tipo tipo) {
         this.tipo = tipo;
     }
 
-    /**
-     * Proporciona todos los datos de la cuenta
-     *
-     * @return El valor como cadena
-     */
+    @Override
     public String toString() {
-        StringBuilder toret = new StringBuilder();
-        toret.append(getNumCuenta()).append(" ; ").append(getAno())
-                .append(" ; ").append(getTipo().toString().toLowerCase());
-        return toret.toString();
+        return String.format("Cuenta número: %s; Año de apertura: %d; Tipo: %s",
+                getNumCuenta(), getAnho(), getTipo().toString().toLowerCase());
     }
 }

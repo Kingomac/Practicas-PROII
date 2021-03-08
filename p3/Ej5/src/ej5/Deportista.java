@@ -26,10 +26,7 @@ public class Deportista {
      * @param categoria, la categoria como un enumerado Categoria
      * @param edad, edad como int
      */
-    public Deportista(String dni, String nombre, Categoria categoria, int edad) throws Exception {
-        if (edad < MIN_EDAD || edad > MAX_EDAD) {
-            throw new Exception("No cumple con los requisitos de edad: mínima " + MIN_EDAD + " / máxima " + MAX_EDAD);
-        }
+    public Deportista(String dni, String nombre, Categoria categoria, int edad) {
         this.dni = dni;
         this.nombre = nombre;
         this.categoria = categoria;

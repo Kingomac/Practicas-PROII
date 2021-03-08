@@ -13,10 +13,7 @@ import java.util.Scanner;
  */
 public class Ej2 {
 
-    public static int divide(int a, int b) throws Exception {
-        if (b == 0) {
-            throw new Exception("Divisón por 0");
-        }
+    public static int divide(int a, int b) throws ArithmeticException {
         return a / b;
     }
 
@@ -27,12 +24,13 @@ public class Ej2 {
         num2 = leerEntero("\nIntroduzca divisor: ");
         try {
             System.out.println("\nEl resultado es: " + divide(num1, num2));
-        } catch (Exception exc) {
+        } catch (ArithmeticException exc) {
             System.out.println("No se pudo realizar la operación: " + exc.getMessage());
         }
     }
 
     private static int leerEntero(String mensaje) {
+        // True: sigue ejecutando el bucle // False: sale del bucle
         boolean seguir;
         int num = 0;
         Scanner entrada = new Scanner(System.in);
@@ -42,7 +40,7 @@ public class Ej2 {
                 num = Integer.parseInt(entrada.nextLine());
                 seguir = false;
             } catch (NumberFormatException exc) {
-                System.out.println("Error leyendo el número: asegurate de que es un entero: " + exc.getMessage());
+                System.err.println("Error leyendo el número: asegurate de que es un entero: " + exc.getMessage());
                 seguir = true;
             }
         } while (seguir);

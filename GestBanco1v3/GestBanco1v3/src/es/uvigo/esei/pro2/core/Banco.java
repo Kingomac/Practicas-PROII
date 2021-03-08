@@ -10,8 +10,12 @@ package es.uvigo.esei.pro2.core;
  */
 public class Banco {
 
-    private Cliente[] clientes;
+    private final Cliente[] clientes; // Array de los clientes del banco
     private int numClientes;
+    // El atributo numClientes propociona información de:
+    //  1.  numero de clientes existentes en el array clientes en cada momento
+    //  2.  posición/indice del elemento del array donde se debería añadir un
+    //      nuevo cliente
 
     /**
      * Nuevo Banco con un num. max. de clientes.
@@ -29,10 +33,13 @@ public class Banco {
      * @param pos el lugar del cliente en el vector de clientes
      * @return el objeto Cliente correspondiente.
      */
-    public Cliente get(int pos) throws Exception {
+    public Cliente get(int pos) {
         if (pos >= getNumClientes()) {
-            throw new Exception("get(pos): se intentó obtener un cliente de índice inválido");
+            System.err.println("get(): sobrepasa la pos: " + (pos + 1)
+                    + " / " + getMaxClientes());
+            System.exit(-1);
         }
+
         return clientes[pos];
     }
 
@@ -48,7 +55,7 @@ public class Banco {
     /**
      * Devuelve el max. de numClientes
      *
-     * @return el num. de clientes max,, como entero
+     * @return el num. de clientes max., como entero
      */
     public int getMaxClientes() {
         return clientes.length;
@@ -59,11 +66,12 @@ public class Banco {
      *
      * @param c el nuevo objeto Cliente
      */
-    public void inserta(Cliente c) throws Exception {
+    public void inserta(Cliente c) {
         final int maxClientes = getMaxClientes();
 
         if (getNumClientes() >= maxClientes) {
-            throw new Exception("inserta(Cliente): se intentó sobrepasar el máximo de clientes");
+            System.err.println("inserta(): sobrepasa max.: " + maxClientes);
+            System.exit(-1);
         }
 
         clientes[numClientes] = c;
@@ -76,26 +84,19 @@ public class Banco {
      * @param pos el lugar del cliente en el vector de clientes
      */
     public void elimina(int pos) {
-        numClientes--;
-        for (int i = pos - 1; i < getNumClientes(); i++) {
-            clientes[i] = clientes[i + 1];
-        }
     }
 
     @Override
     public String toString() {
-        if (getNumClientes() == 0) {
-            return "No hay clientes";
-        }
         StringBuilder toret = new StringBuilder();
-        for (int i = 0; i < getNumClientes(); i++) {
-            try {
-                toret.append(i + 1).append(".").append(this.get(i));
-            } catch (Exception ex) {
-                toret.append("No se pudo obtener el cliente: ").append(ex.getMessage());
+        for (int i = 0; i < clientes.length; i++) {
+            toret.append(String.format("%d. Datos del cliente: %s ; %s ; %s\nDatos de sus cuentas:\n",
+                    i + 1, clientes[i].getDni(), clientes[i].getNombre(),
+                    clientes[i].getDomicilio()));
+            for (int j = 0; j < clientes[i].getNumCuentas(); j++) {
+                toret.append(clientes[i].getCuenta(j) + "\n");
             }
         }
-        return toret.append("\n").toString();
+        return toret.toString();
     }
-
 }

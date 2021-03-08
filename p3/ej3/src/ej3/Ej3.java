@@ -20,7 +20,7 @@ public class Ej3 {
         Persona yo;
         Persona p;
         try {
-            yo = new Persona("Mario", "Vila Comesaña", 395128160);
+            yo = new Persona("Mario", "Vila Comesaña", 123456789);
             System.out.println(yo);
         } catch (Exception exc) {
             System.out.println("Error creando la persona: " + exc.getMessage());

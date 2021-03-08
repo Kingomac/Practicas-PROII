@@ -1,9 +1,6 @@
 package ej4;
 
-import static ej4.LeerTeclado.leerNota;
-import static ej4.LeerTeclado.leerObligatorio;
 import java.text.DecimalFormat;
-import java.util.Scanner;
 
 /**
  *
@@ -41,30 +38,6 @@ public class Alumno {
     private final String nombre;
 
     private double[] notas;
-
-    public static Alumno leerAlumno() {
-        int dni;
-        String apellidos;
-        String nombre;
-        Alumno toret;
-        Scanner entrada = new Scanner(System.in);
-        System.out.println("Introduce los datos de un alumno: ");
-        do {
-            System.out.print("\tDNI: ");
-            try {
-                dni = Integer.parseInt(entrada.nextLine());
-            } catch (NumberFormatException exc) {
-                dni = 0;
-            }
-        } while (dni > 100000000);
-        apellidos = leerObligatorio("\tApellidos: ");
-        nombre = leerObligatorio("\tNombre: ");
-        toret = new Alumno(dni, apellidos, nombre);
-        for (Alumno.Nota n : Alumno.Nota.values()) {
-            toret.setNota(n, leerNota("\tNota " + n + ": "));
-        }
-        return toret;
-    }
 
     public Alumno(int dni, String apellidos, String nombre) {
         this.dni = dni;

@@ -22,16 +22,31 @@ public class Ej5 {
         Deportista deportista1 = leeDeportista();
         /*Deportista deportista1 = new Deportista("12345678A","Pedro Cuesta",
         				Deportista.Categoria.SENIOR);*/
-        pabellon.inserta(deportista1);
-
+        try {
+            pabellon.inserta(deportista1);
+        } catch (Exception exc) {
+            System.err.println("Error insertando deportista: " + exc.getMessage());
+        }
         Deportista deportista2 = leeDeportista();
         /*Deportista deportista2 = new Deportista("87654321Z", "Antonio García",
         					Deportista.Categoria.CADETE);*/
-        pabellon.inserta(deportista2);
+        try {
+            pabellon.inserta(deportista2);
+        } catch (Exception exc) {
+            System.err.println("Error insertando deportista: " + exc.getMessage());
+        }
 
         System.out.println();
-        System.out.println(pabellon.get(0));
-        System.out.println(pabellon.get(1));
+        try {
+            System.out.println(pabellon.get(0));
+        } catch (Exception exc) {
+            System.err.println("Error obtieniendo deportista: " + exc.getMessage());
+        }
+        try {
+            System.out.println(pabellon.get(1));
+        } catch (Exception exc) {
+            System.err.println("Error obteniendo deportista: " + exc.getMessage());
+        }
 
     }
 
@@ -47,7 +62,6 @@ public class Ej5 {
         char car;
         Deportista.Categoria categoria = Deportista.Categoria.BENJAMIN;
         int edad;
-        Deportista toret = null;
 
         do {
             System.out.print("Introduce DNI: ");
@@ -90,16 +104,12 @@ public class Ej5 {
             System.out.print("Edad: ");
             try {
                 edad = Integer.parseInt(entrada.nextLine());
-                toret = new Deportista(dni, nombre, categoria, edad);
             } catch (NumberFormatException exc) {
                 edad = -1;
                 System.out.println("Asegurate de introducir un entero");
-            } catch (Exception exc) {
-                edad = -1;
-                System.out.println("Error creando el deportista: " + exc.getMessage());
             }
         } while (edad < Deportista.MIN_EDAD || edad > Deportista.MAX_EDAD);
-        return toret;
+        return new Deportista(dni, nombre, categoria, edad);
 
     }
 

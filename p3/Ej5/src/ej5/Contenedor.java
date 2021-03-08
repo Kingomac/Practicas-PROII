@@ -25,11 +25,10 @@ public class Contenedor {
      * @param pos la posición en el vector de deportistas
      * @return el objeto Deportista correspondiente
      */
-    public Deportista get(int pos) {
+    public Deportista get(int pos) throws Exception {
         if (pos >= getNumDeportistas()) {
-            System.err.println("get(): sobrepasa la pos: " + (pos + 1) + " / "
+            throw new Exception("get(): sobrepasa la pos: " + (pos + 1) + " / "
                     + getMaxDeportistas());
-            System.exit(-1);
         }
         return deportistas[pos];
     }
@@ -57,13 +56,12 @@ public class Contenedor {
      *
      * @param d el nuevo objeto deportista
      */
-    public void inserta(Deportista d) {
+    public void inserta(Deportista d) throws Exception {
         final int maxDeportistas = getMaxDeportistas();
 
         if (getNumDeportistas() >= maxDeportistas) {
-            System.err.println("inserta(): sobrepasa max.: "
+            throw new Exception("inserta(): sobrepasa max.: "
                     + maxDeportistas);
-            System.exit(-1);
         }
 
         deportistas[numDeportistas] = d;

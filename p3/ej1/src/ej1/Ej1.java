@@ -47,7 +47,7 @@ public class Ej1 {
         System.out.println("Menor: " + menor);
     }
 
-    private static int leerEntero(String mensaje) {
+    /*private static int leerEntero(String mensaje) {
         Scanner entrada = new Scanner(System.in);
         int toret = 0;
         boolean seguir = false;
@@ -61,6 +61,33 @@ public class Ej1 {
                 seguir = true;
             }
         } while (seguir);
+        return toret;
+    }*/
+    /**
+     * Método para leer enteros mejorado
+     *
+     * @param msg
+     * @return
+     */
+    public static int leerEntero(String msg) {
+        int toret = 0;
+        String temp;
+        boolean noValido = false;   // True: si no es un entero valido
+        // False: si tiene un entero valido
+        Scanner teclado = new Scanner(System.in);
+
+        do {
+            try {
+                noValido = false;
+                System.out.print(msg);
+                temp = teclado.nextLine();
+                toret = Integer.parseInt(temp);
+            } catch (NumberFormatException exc) {
+                noValido = true;
+                System.err.println("Error. Formato numerico no valido");
+            }
+        } while (noValido == true);
+
         return toret;
     }
 
