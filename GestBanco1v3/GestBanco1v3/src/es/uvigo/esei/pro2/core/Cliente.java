@@ -89,7 +89,12 @@ public class Cliente {
      * @param cuenta la nueva Cuenta
      */
     public void nuevaCuenta(Cuenta cuenta) {
-
+        Cuenta[] nuevas = new Cuenta[cuentas.length + 1];
+        for (int i = 0; i < cuentas.length; i++) {
+            nuevas[i] = cuentas[i];
+        }
+        nuevas[nuevas.length - 1] = cuenta;
+        cuentas = nuevas;
     }
 
     /**
@@ -108,10 +113,9 @@ public class Cliente {
      * @param cuenta el índice de la cuenta (empezando en 0)
      * @return la Cuenta que se encuentra en la posición especificada
      */
-    public Cuenta getCuenta(int cuenta) {
+    public Cuenta getCuenta(int cuenta) throws Exception {
         if ((cuenta < 0) || (cuenta >= getNumCuentas())) {
-            System.err.println("El índice especificado no es válido.");
-            System.exit(-1);
+            throw new Exception("El índice especificado no es válido.");
         }
 
         return this.cuentas[cuenta];
@@ -122,14 +126,13 @@ public class Cliente {
      *
      * @param pos el índice de la cuenta que se quiere eliminar (empezando en 0)
      */
-    public void eliminaCuenta(int pos) {
+    public void eliminaCuenta(int pos) throws Exception {
         Cuenta[] nuevasCuentas;
         int indiceNuevasCuentas;
 
         if (getNumCuentas() == 1) {
-            System.err.println("El cliente solo tiene una cuenta y no puede"
-                    + " quedar sin ninguna.");
-            System.exit(-1);
+            throw new Exception("El cliente solo tiene una cuenta y no puede "
+                    + "quedar sin ninguna");
         } else {
             nuevasCuentas = new Cuenta[getNumCuentas() - 1];
             indiceNuevasCuentas = 0;
@@ -145,16 +148,14 @@ public class Cliente {
 
     @Override
     public String toString() {
-        String toret;
-
-        toret = "Cliente " + getNombre() + " con DNI "
-                + getDni() + " y domicilio en " + getDomicilio() + ". \n\n "
-                + "\tDatos de sus cuentas:  ";
+        StringBuilder toret = new StringBuilder();
+        toret.append(String.format("Cliente %s con DNI %s y domicilio en %s.\n\n\tDatos de sus cuentas",
+                getNombre(), getDni(), getDomicilio()));
 
         for (Cuenta cuenta : this.cuentas) {
-            toret += "\n\t\t" + cuenta.toString();
+            toret.append("\n\t\t").append(cuenta.toString());
         }
 
-        return toret;
+        return toret.toString();
     }
 }

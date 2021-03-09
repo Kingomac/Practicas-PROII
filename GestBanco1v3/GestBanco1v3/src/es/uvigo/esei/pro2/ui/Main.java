@@ -6,7 +6,7 @@ package es.uvigo.esei.pro2.ui;
 
 /*
  * Ejercicios
- * Hechos: 1, 5
+ * Hechos: 1, 2, 3, 4, 5, 6, 7
  */
 public class Main {
 

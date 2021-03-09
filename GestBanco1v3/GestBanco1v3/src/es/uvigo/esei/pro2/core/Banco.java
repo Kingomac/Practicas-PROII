@@ -33,13 +33,11 @@ public class Banco {
      * @param pos el lugar del cliente en el vector de clientes
      * @return el objeto Cliente correspondiente.
      */
-    public Cliente get(int pos) {
+    public Cliente get(int pos) throws Exception {
         if (pos >= getNumClientes()) {
-            System.err.println("get(): sobrepasa la pos: " + (pos + 1)
-                    + " / " + getMaxClientes());
-            System.exit(-1);
+            throw new Exception(String.format("get(): sobrepasa la pos: %d / %d",
+                    pos + 1, getMaxClientes()));
         }
-
         return clientes[pos];
     }
 
@@ -66,12 +64,11 @@ public class Banco {
      *
      * @param c el nuevo objeto Cliente
      */
-    public void inserta(Cliente c) {
+    public void inserta(Cliente c) throws Exception {
         final int maxClientes = getMaxClientes();
 
         if (getNumClientes() >= maxClientes) {
-            System.err.println("inserta(): sobrepasa max.: " + maxClientes);
-            System.exit(-1);
+            throw new Exception("inserta(): sobrepasa max.: " + maxClientes);
         }
 
         clientes[numClientes] = c;
@@ -84,17 +81,26 @@ public class Banco {
      * @param pos el lugar del cliente en el vector de clientes
      */
     public void elimina(int pos) {
+        for (int i = pos; i < getNumClientes() - 1; i++) {
+            clientes[i] = clientes[i + 1];
+        }
+        --numClientes;
     }
 
     @Override
     public String toString() {
         StringBuilder toret = new StringBuilder();
-        for (int i = 0; i < clientes.length; i++) {
+        for (int i = 0; i < getNumClientes(); i++) {
             toret.append(String.format("%d. Datos del cliente: %s ; %s ; %s\nDatos de sus cuentas:\n",
                     i + 1, clientes[i].getDni(), clientes[i].getNombre(),
                     clientes[i].getDomicilio()));
             for (int j = 0; j < clientes[i].getNumCuentas(); j++) {
-                toret.append(clientes[i].getCuenta(j) + "\n");
+                try {
+                    toret.append(clientes[i].getCuenta(j));
+                } catch (Exception ex) {
+                    toret.append("Error: no se pudo obtener la cuenta");
+                }
+                toret.append("\n");
             }
         }
         return toret.toString();

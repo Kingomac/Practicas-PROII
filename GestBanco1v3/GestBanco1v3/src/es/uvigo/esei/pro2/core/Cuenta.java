@@ -20,8 +20,7 @@ public class Cuenta {
      *
      * @param numCuenta número de cuenta del cliente
      * @param anhoApertura el año de apertura de la cuenta del cliente
-     * @param ahorro si es una cuenta de ahorro
-     * @param corriente si es una cuenta corriente
+     * @param tipo tipo de cuenta
      */
     public Cuenta(String numCuenta, int anhoApertura, Tipo tipo) {
 

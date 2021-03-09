@@ -3,7 +3,6 @@ package es.uvigo.esei.pro2.ui;
 import es.uvigo.esei.pro2.core.Banco;
 import es.uvigo.esei.pro2.core.Cliente;
 import es.uvigo.esei.pro2.core.Cuenta;
-
 import java.util.Scanner;
 
 /**
@@ -44,7 +43,7 @@ public class Ilc {
                     eliminaCliente(coleccion);
                     break;
                 case 4:
-                    visualiza(coleccion);
+                    System.out.println(coleccion);
                     break;
                 default:
                     System.out.println("No es correcta esa opción"
@@ -87,7 +86,11 @@ public class Ilc {
         System.out.println("\nAlta cliente");
 
         Cliente c = leeCliente();
-        coleccion.inserta(c);
+        try {
+            coleccion.inserta(c);
+        } catch (Exception ex) {
+            System.err.println("No se pudo insertar el cliente: " + ex.getMessage());
+        }
     }
 
     /**
@@ -116,7 +119,11 @@ public class Ilc {
         System.out.println("\nModificación cliente");
 
         if (coleccion.getNumClientes() > 0) {
-            this.modificaCliente(coleccion.get(leePosCliente(coleccion)));
+            try {
+                this.modificaCliente(coleccion.get(leePosCliente(coleccion)));
+            } catch (Exception ex) {
+                System.err.println("No se puedo obtener el cliente: " + ex.getMessage());
+            }
         } else {
             System.out.println("La coleccion no contiene clientes.");
         }
@@ -171,28 +178,11 @@ public class Ilc {
      * @return El objeto Cuenta creado
      */
     private Cuenta leerCuenta() {
-        char tipoCuenta;
-        boolean ahorro = false;
-        boolean corriente = false;
-
+        Cuenta.Tipo tipo = leerTipoCuenta();
         String numCuenta = leeCadena("\tNúmero de cuenta: ");
         int anho = leeEntero("\tAño de apertura: ");
 
-        do {
-            tipoCuenta = leeCadena("\tIntroduce el tipo de cuenta del clietne "
-                    + "(A: ahorro, C: corriente): ").toUpperCase().charAt(0);
-        } while ((tipoCuenta != 'A') && (tipoCuenta != 'C'));
-
-        switch (tipoCuenta) {
-            case 'A':
-                ahorro = true;
-                break;
-            case 'C':
-                corriente = true;
-                break;
-        }
-
-        return new Cuenta(numCuenta, anho, ahorro, corriente);
+        return new Cuenta(numCuenta, anho, tipo);
     }
 
     /**
@@ -235,12 +225,24 @@ public class Ilc {
                 case 1:
                     c.nuevaCuenta(leerCuenta());
                     break;
-                case 2:
-                    modificaCuenta(c.getCuenta(leePosCuenta(c.getNumCuentas())));
-                    break;
-                case 3:
-                    c.eliminaCuenta(leePosCuenta(c.getNumCuentas()));
-                    break;
+                case 2: {
+                    try {
+                        modificaCuenta(c.getCuenta(leePosCuenta(c.getNumCuentas())));
+                    } catch (Exception ex) {
+                        System.err.println("No se pudo obtener la cuenta: " + ex.getMessage());
+                    }
+                }
+                break;
+
+                case 3: {
+                    try {
+                        c.eliminaCuenta(leePosCuenta(c.getNumCuentas()));
+                    } catch (Exception ex) {
+                        System.err.println("No se pudo obtener la cuenta: " + ex.getMessage());
+                    }
+                }
+                break;
+
                 default:
                     System.out.println("No es correcta esa opción ( "
                             + op + " )");
@@ -271,15 +273,10 @@ public class Ilc {
      * @param cuenta Objeto Cuenta a modificar
      */
     private void modificaCuenta(Cuenta cuenta) {
-        char tipoCuenta;
         String numCuenta;
-        int anho;
 
         String temp;
-        String tipoCuentaActual;
-
-        boolean ahorro = false;
-        boolean corriente = false;
+        int numTipo;
 
         numCuenta = leeCadena("\tNúmero de cuenta ["
                 + cuenta.getNumCuenta() + "]: ", true);
@@ -292,33 +289,33 @@ public class Ilc {
         if (!temp.isEmpty()) {
             cuenta.setAnho(Integer.parseInt(temp));
         }
+        cuenta.setTipo(leerTipoCuenta(cuenta.getTipo()));
+    }
 
-        if (cuenta.estaEtiquetadoComoAhorro()) {
-            tipoCuentaActual = "Ahorro";
-            tipoCuenta = 'A';
-        } else {
-            tipoCuentaActual = "Corriente";
-            tipoCuenta = 'C';
-        }
+    /**
+     * Pide introducir un tipo de cuenta por teclado y marcando cuál es el tipo
+     * que ya tenía
+     *
+     * @return Tipo de cuenta introducido
+     */
+    private Cuenta.Tipo leerTipoCuenta(Cuenta.Tipo actual) {
+        int numTipo;
         do {
-            temp = leeCadena("\tIntroduce el tipo de cuenta del clietne "
-                    + "(A: ahorro, C: corriente) [" + tipoCuentaActual
-                    + "] : ", true);
-            if (temp.length() != 0) {
-                tipoCuenta = temp.toUpperCase().charAt(0);
+            for (int i = 0; i < Cuenta.Tipo.values().length; i++) {
+                System.out.format("\t%s%d. %s\n", Cuenta.Tipo.values()[i].equals(actual) ? "*" : "", i + 1, Cuenta.Tipo.values()[i]);
             }
-        } while ((tipoCuenta != 'A') && (tipoCuenta != 'C'));
+            numTipo = Ilc.leeEntero("\t-> ");
+        } while (numTipo < 1 || numTipo > Cuenta.Tipo.values().length);
+        return Cuenta.Tipo.values()[numTipo - 1];
+    }
 
-        switch (tipoCuenta) {
-            case 'A':
-                ahorro = true;
-                break;
-            case 'C':
-                corriente = true;
-                break;
-        }
-        cuenta.setEtiquetaAhorro(ahorro);
-        cuenta.setEtiquetaCorriente(corriente);
+    /**
+     * Lee un tipo de cuenta por teclado
+     *
+     * @return Tipo de cuenta introducido
+     */
+    private Cuenta.Tipo leerTipoCuenta() {
+        return leerTipoCuenta(null);
     }
 
     /**
@@ -365,7 +362,7 @@ public class Ilc {
      *
      * @param coleccion El objeto Banco del que visualizar sus clientes.
      */
-    private void visualiza(Banco coleccion) {
+    /*private void visualiza(Banco coleccion) {
         System.out.println("\n--------------------");
         System.out.println("\nListar clientes\n");
 
@@ -379,9 +376,9 @@ public class Ilc {
         } else {
             System.out.println("No hay clientes.");
         }
-    }
+    }*/
 
-    /* -------------------------------------------------------------*/
+ /* -------------------------------------------------------------*/
     //  METODOS PARA LA LECTURA DE DATOS DEL TECLADO
     /* -------------------------------------------------------------*/
     /**
