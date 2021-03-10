@@ -70,10 +70,20 @@ public class Cuenta {
         return tipo;
     }
 
+    /**
+     * Cambia el tipo de cuenta
+     *
+     * @param tipo Nuevo valor como Cuenta.Tipo
+     */
     public void setTipo(Tipo tipo) {
         this.tipo = tipo;
     }
 
+    /**
+     *
+     * @return Datos de la cuenta en formato => "Cuenta número: ...; Año de
+     * apertura: ...; Tipo: ...
+     */
     @Override
     public String toString() {
         return String.format("Cuenta número: %s; Año de apertura: %d; Tipo: %s",

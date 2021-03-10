@@ -17,7 +17,10 @@ public class Ilc {
         int op;
 
         // Lee el num. max. de clientes
-        int maxClientes = leeEntero("Num. max. clientes: ");
+        int maxClientes;
+        do {
+            maxClientes = leeEntero("Num. max. clientes: ");
+        } while (maxClientes <= 0);
 
         // Prepara
         Banco coleccion = new Banco(maxClientes);
@@ -45,6 +48,8 @@ public class Ilc {
                 case 4:
                     System.out.println(coleccion);
                     break;
+                case 5:
+                    listar(coleccion);
                 default:
                     System.out.println("No es correcta esa opción"
                             + " ( " + op + " )");
@@ -68,6 +73,7 @@ public class Ilc {
                     + "2. Modifica un cliente\n"
                     + "3. Elimina un cliente\n"
                     + "4. Listar clientes\n"
+                    + "5. Filtrar clientes por tipo de cuenta\n"
                     + "0. Salir\n");
             toret = leeEntero("Selecciona: ");
         } while (toret < 0 && toret > 4);
@@ -340,6 +346,31 @@ public class Ilc {
     }
 
     /**
+     * Muestra una lista de clientes filtrados por los tipos de cuentas que
+     * tienen
+     *
+     * @param coleccion Banco que contiene la información de los clientes
+     */
+    private void listar(Banco coleccion) {
+        Cuenta.Tipo tipo = leerTipoCuenta();
+        for (int i = 0; i < coleccion.getNumClientes(); i++) {
+            try {
+                int j = 0;
+                Cuenta c = coleccion.get(i).getCuenta(j);
+                while (j < coleccion.get(i).getNumCuentas() && c.getTipo() != tipo) {
+                    c = coleccion.get(i).getCuenta(j);
+                }
+                if (c.getTipo() == tipo) {
+                    System.out.println((i + 1) + ". " + coleccion.get(i));
+                }
+            } catch (Exception ex) {
+                System.err.println("Error: " + ex.getMessage());
+            }
+
+        }
+    }
+
+    /**
      * Lee del teclado la posición de un cliente en la colección
      *
      * @param coleccion La colección de la que se obtiene el max.
@@ -440,5 +471,4 @@ public class Ilc {
 
         return leer;
     }
-
 }

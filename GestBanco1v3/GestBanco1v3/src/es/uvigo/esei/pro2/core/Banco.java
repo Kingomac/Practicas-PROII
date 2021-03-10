@@ -87,6 +87,11 @@ public class Banco {
         --numClientes;
     }
 
+    /**
+     *
+     * @return Lista de clientes con formato "num. Datos del cliente: ...
+     * ;...;...; Datos de sus cuentas: ...
+     */
     @Override
     public String toString() {
         StringBuilder toret = new StringBuilder();
