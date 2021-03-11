@@ -26,8 +26,40 @@ public class Ej4 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Alumno n = LeerTeclado.leerAlumno();
-        System.out.println(n);
+        int opcion;
+        Curso curso = new Curso(LeerTeclado.leerEntero("Número máximo de alumnos: "));
+
+        do {
+            opcion = menu();
+            switch (opcion) {
+                case 1:
+                try {
+                    curso.insertar(LeerTeclado.leerAlumno());
+                } catch (Exception ex) {
+                    System.err.println("No se pudo insertar el alumno: " + ex.getMessage());
+                }
+                break;
+
+                case 2:
+                    System.out.println(curso);
+                    break;
+                case 3:
+                try {
+                    System.out.println(curso.getAlumno(LeerTeclado.leerEntero("Posición 1..." + curso.getCont()) - 1));
+                } catch (Exception ex) {
+                    System.err.println("No se ha podido obtener el alumno: " + ex.getMessage());
+                }
+            }
+        } while (opcion != 4);
+    }
+
+    private static int menu() {
+        int opcion;
+        do {
+            System.out.println("Menú:\n1. Añadir alumno\n2. Listar alumnos\n3. Alumno dada posición\n4. Salir");
+            opcion = LeerTeclado.leerEntero("-> ");
+        } while (opcion > 4 || opcion < 1);
+        return opcion;
     }
 
 }

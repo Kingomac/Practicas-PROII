@@ -27,7 +27,7 @@ public class LeerTeclado {
             } catch (NumberFormatException exc) {
                 dni = 0;
             }
-        } while (dni > 100000000);
+        } while (Integer.toString(dni).length() != 8);
         apellidos = leerObligatorio("\tApellidos: ");
         nombre = leerObligatorio("\tNombre: ");
         toret = new Alumno(dni, apellidos, nombre);
@@ -47,17 +47,38 @@ public class LeerTeclado {
         return toret;
     }
 
+    public static int leerEntero(String mensaje) {
+        boolean seguir;
+        int toret = 0;
+        Scanner scan = new Scanner(System.in);
+        do {
+            System.out.print(mensaje);
+            try {
+                toret = Integer.parseInt(scan.nextLine());
+                seguir = false;
+            } catch (NumberFormatException ex) {
+                seguir = true;
+                System.err.println("Introduce un entero: " + ex.getMessage());
+            }
+        } while (seguir);
+        return toret;
+    }
+
     public static double leerNota(String mensaje) {
         Scanner entrada = new Scanner(System.in);
         double toret;
+        boolean seguir;
         do {
             System.out.print(mensaje);
             try {
                 toret = Double.parseDouble(entrada.nextLine());
+                seguir = false;
             } catch (NumberFormatException exc) {
                 toret = -1;
+                seguir = true;
+                System.err.println("Error: " + exc.getMessage());
             }
-        } while (toret >= 0 && toret <= 10);
+        } while (toret < 0 || toret > 10 || seguir);
         return toret;
     }
 }

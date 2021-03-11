@@ -1,7 +1,5 @@
 package ej4;
 
-import java.text.DecimalFormat;
-
 /**
  *
  * @author Mario
@@ -74,22 +72,21 @@ public class Alumno {
      */
     public String calcularNotaFinal() {
         String toret;
-        DecimalFormat df = new DecimalFormat("##.#");
         double nota = 0;
         for (int i = 0; i < Nota.values().length; i++) {
             nota += getNota(Nota.values()[i]) * ponderaciones[i];
         }
         if (nota < 5) {
-            toret = "suspenso(";
+            toret = "suspenso";
         } else if (nota >= 5 && nota < 7) {
-            toret = "aprobado(";
+            toret = "aprobado";
         } else if (nota >= 7 && nota < 9) {
-            toret = "notable(";
+            toret = "notable";
         } else {
-            toret = "sobresaliente(";
+            toret = "sobresaliente";
         }
 
-        return toret + df.format(nota) + ")";
+        return String.format("%s(%.1f)", toret, nota);
     }
 
     /**
@@ -100,16 +97,9 @@ public class Alumno {
      */
     @Override
     public String toString() {
-        StringBuilder toret = new StringBuilder();
-        toret.append(getDni());
-        toret.append(LETRAS_DNI.charAt(getDni() % 23));
-        toret.append(" - ");
-        toret.append(getApellidos());
-        toret.append(", ");
-        toret.append(getNombre());
-        toret.append(": ");
-        toret.append(calcularNotaFinal());
-        return toret.toString();
+        return String.format("%d%s - %s, %s: %s", getDni(),
+                LETRAS_DNI.charAt(getDni() % 23), getApellidos(), getNombre(),
+                calcularNotaFinal());
     }
 
 }
