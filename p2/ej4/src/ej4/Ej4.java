@@ -31,24 +31,17 @@ public class Ej4 {
 
         do {
             opcion = menu();
-            switch (opcion) {
-                case 1:
-                try {
-                    curso.insertar(LeerTeclado.leerAlumno());
-                } catch (Exception ex) {
-                    System.err.println("No se pudo insertar el alumno: " + ex.getMessage());
+            try {
+                switch (opcion) {
+                    case 1 ->
+                        curso.insertar(LeerTeclado.leerAlumno());
+                    case 2 ->
+                        System.out.println(curso);
+                    case 3 ->
+                        System.out.println(curso.getAlumno(LeerTeclado.leerEntero("Posición 1..." + curso.getCont()) - 1));
                 }
-                break;
-
-                case 2:
-                    System.out.println(curso);
-                    break;
-                case 3:
-                try {
-                    System.out.println(curso.getAlumno(LeerTeclado.leerEntero("Posición 1..." + curso.getCont()) - 1));
-                } catch (Exception ex) {
-                    System.err.println("No se ha podido obtener el alumno: " + ex.getMessage());
-                }
+            } catch (Exception ex) {
+                System.err.println("Se ha producido un error: " + ex.getMessage());
             }
         } while (opcion != 4);
     }

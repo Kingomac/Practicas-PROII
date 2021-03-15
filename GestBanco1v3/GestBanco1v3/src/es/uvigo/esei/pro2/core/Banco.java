@@ -75,16 +75,47 @@ public class Banco {
         ++numClientes;
     }
 
+    public String listarCuentas(Cuenta.Tipo tipo) throws Exception {
+        StringBuilder toret = new StringBuilder();
+        StringBuilder cliente;
+        final int numClientes = getNumClientes();
+
+        if (numClientes > 0) {
+            for (int i = 0; i < numClientes; i++) {
+                cliente = new StringBuilder();
+                for (int j = 0; j < clientes[i].getNumCuentas(); j++) {
+                    if (clientes[i].getCuenta(j).getTipo().equals(tipo)) {
+                        cliente.append("\t");
+                        cliente.append(clientes[i].getCuenta(j).toString());
+                        cliente.append("\n");
+                    }
+                }
+
+                if (cliente.length() != 0) {
+                    toret.append("El cliente ");
+                    toret.append(clientes[i].getNombre());
+                    toret.append(" tiene las siguientes cuentas del tipo ");
+                    toret.append(tipo.name().toLowerCase());
+                    toret.append("\n");
+                    toret.append(cliente);
+                }
+            }
+        }
+        return toret.toString();
+
+    }
+
     /**
      * Elimina un cliente
      *
      * @param pos el lugar del cliente en el vector de clientes
      */
     public void elimina(int pos) {
-        for (int i = pos; i < getNumClientes() - 1; i++) {
-            clientes[i] = clientes[i + 1];
-        }
-        --numClientes;
+//        for (int i = pos; i < getNumClientes() - 1; i++) {
+//            clientes[i] = clientes[i + 1];
+//        }
+//        numClientes--;
+        clientes[pos] = clientes[--numClientes];
     }
 
     /**
@@ -94,19 +125,12 @@ public class Banco {
      */
     @Override
     public String toString() {
+        if (getNumClientes() <= 0) {
+            return "No hay clientes";
+        }
         StringBuilder toret = new StringBuilder();
         for (int i = 0; i < getNumClientes(); i++) {
-            toret.append(String.format("%d. Datos del cliente: %s ; %s ; %s\nDatos de sus cuentas:\n",
-                    i + 1, clientes[i].getDni(), clientes[i].getNombre(),
-                    clientes[i].getDomicilio()));
-            for (int j = 0; j < clientes[i].getNumCuentas(); j++) {
-                try {
-                    toret.append(clientes[i].getCuenta(j));
-                } catch (Exception ex) {
-                    toret.append("Error: no se pudo obtener la cuenta");
-                }
-                toret.append("\n");
-            }
+            toret.append(i + 1).append(". ").append(clientes[i]).append("\n");
         }
         return toret.toString();
     }

@@ -7,7 +7,7 @@ package es.uvigo.esei.pro2.core;
 public class Cuenta {
 
     public static enum Tipo {
-        AHORRO, CORRIENTE
+        AHORRO, CORRIENTE, DEBE, HABER
     };
 
     private String numCuenta;   // Numero de cuenta

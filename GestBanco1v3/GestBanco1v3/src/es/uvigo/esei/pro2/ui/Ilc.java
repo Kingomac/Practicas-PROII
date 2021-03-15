@@ -31,28 +31,32 @@ public class Ilc {
             System.out.println("\nGestión de una entidad bancaria.");
 
             op = menu(coleccion);
-
-            switch (op) {
-                case 0:
-                    System.out.println("Fin gestión banco.");
-                    break;
-                case 1:
-                    insertaCliente(coleccion);
-                    break;
-                case 2:
-                    modificaCliente(coleccion);
-                    break;
-                case 3:
-                    eliminaCliente(coleccion);
-                    break;
-                case 4:
-                    System.out.println(coleccion);
-                    break;
-                case 5:
-                    listar(coleccion);
-                default:
-                    System.out.println("No es correcta esa opción"
-                            + " ( " + op + " )");
+            try {
+                switch (op) {
+                    case 0:
+                        System.out.println("Fin gestión banco.");
+                        break;
+                    case 1:
+                        insertaCliente(coleccion);
+                        break;
+                    case 2:
+                        modificaCliente(coleccion);
+                        break;
+                    case 3:
+                        eliminaCliente(coleccion);
+                        break;
+                    case 4:
+                        System.out.println(coleccion);
+                        break;
+                    case 5:
+                        listarPorTipoCuenta(coleccion);
+                        break;
+                    default:
+                        System.out.println("No es correcta esa opción"
+                                + " ( " + op + " )");
+                }
+            } catch (Exception ex) {
+                System.err.println("Se ha producido un error: " + ex.getMessage());
             }
         } while (op != 0);
 
@@ -68,15 +72,16 @@ public class Ilc {
 
         do {
             System.out.println(
-                    String.format("%d/%d\n", coleccion.getNumClientes(), coleccion.getMaxClientes())
-                    + "1. Inserta un nuevo cliente\n"
+                    coleccion.getNumClientes() + "/"
+                    + coleccion.getMaxClientes()
+                    + "\n1. Inserta un nuevo cliente\n"
                     + "2. Modifica un cliente\n"
                     + "3. Elimina un cliente\n"
                     + "4. Listar clientes\n"
                     + "5. Filtrar clientes por tipo de cuenta\n"
                     + "0. Salir\n");
             toret = leeEntero("Selecciona: ");
-        } while (toret < 0 && toret > 4);
+        } while (toret < 0 && toret > 5);
 
         System.out.println();
         return toret;
@@ -87,16 +92,12 @@ public class Ilc {
      *
      * @param coleccion La coleccion en la que se inserta el cliente.
      */
-    private void insertaCliente(Banco coleccion) {
+    private void insertaCliente(Banco coleccion) throws Exception {
         System.out.println("\n------------");
         System.out.println("\nAlta cliente");
 
         Cliente c = leeCliente();
-        try {
-            coleccion.inserta(c);
-        } catch (Exception ex) {
-            System.err.println("No se pudo insertar el cliente: " + ex.getMessage());
-        }
+        coleccion.inserta(c);
     }
 
     /**
@@ -120,16 +121,12 @@ public class Ilc {
      *
      * @param coleccion La coleccion de la cual modificar un cliente.
      */
-    private void modificaCliente(Banco coleccion) {
+    private void modificaCliente(Banco coleccion) throws Exception {
         System.out.println("\n--------------------");
         System.out.println("\nModificación cliente");
 
         if (coleccion.getNumClientes() > 0) {
-            try {
-                this.modificaCliente(coleccion.get(leePosCliente(coleccion)));
-            } catch (Exception ex) {
-                System.err.println("No se puedo obtener el cliente: " + ex.getMessage());
-            }
+            this.modificaCliente(coleccion.get(leePosCliente(coleccion)));
         } else {
             System.out.println("La coleccion no contiene clientes.");
         }
@@ -196,7 +193,7 @@ public class Ilc {
      *
      * @param c Objeto Cliente a modificar
      */
-    private void modificaCliente(Cliente c) {
+    private void modificaCliente(Cliente c) throws Exception {
         int op = 0;
 
         System.out.println("\nModificando los datos del siguiente cliente:");
@@ -231,23 +228,13 @@ public class Ilc {
                 case 1:
                     c.nuevaCuenta(leerCuenta());
                     break;
-                case 2: {
-                    try {
-                        modificaCuenta(c.getCuenta(leePosCuenta(c.getNumCuentas())));
-                    } catch (Exception ex) {
-                        System.err.println("No se pudo obtener la cuenta: " + ex.getMessage());
-                    }
-                }
-                break;
+                case 2:
+                    modificaCuenta(c.getCuenta(leePosCuenta(c.getNumCuentas())));
+                    break;
 
-                case 3: {
-                    try {
-                        c.eliminaCuenta(leePosCuenta(c.getNumCuentas()));
-                    } catch (Exception ex) {
-                        System.err.println("No se pudo obtener la cuenta: " + ex.getMessage());
-                    }
-                }
-                break;
+                case 3:
+                    c.eliminaCuenta(leePosCuenta(c.getNumCuentas()));
+                    break;
 
                 default:
                     System.out.println("No es correcta esa opción ( "
@@ -282,7 +269,6 @@ public class Ilc {
         String numCuenta;
 
         String temp;
-        int numTipo;
 
         numCuenta = leeCadena("\tNúmero de cuenta ["
                 + cuenta.getNumCuenta() + "]: ", true);
@@ -351,23 +337,9 @@ public class Ilc {
      *
      * @param coleccion Banco que contiene la información de los clientes
      */
-    private void listar(Banco coleccion) {
+    private void listarPorTipoCuenta(Banco coleccion) throws Exception {
         Cuenta.Tipo tipo = leerTipoCuenta();
-        for (int i = 0; i < coleccion.getNumClientes(); i++) {
-            try {
-                int j = 0;
-                Cuenta c = coleccion.get(i).getCuenta(j);
-                while (j < coleccion.get(i).getNumCuentas() && c.getTipo() != tipo) {
-                    c = coleccion.get(i).getCuenta(j);
-                }
-                if (c.getTipo() == tipo) {
-                    System.out.println((i + 1) + ". " + coleccion.get(i));
-                }
-            } catch (Exception ex) {
-                System.err.println("Error: " + ex.getMessage());
-            }
-
-        }
+        System.out.println(coleccion.listarCuentas(tipo));
     }
 
     /**

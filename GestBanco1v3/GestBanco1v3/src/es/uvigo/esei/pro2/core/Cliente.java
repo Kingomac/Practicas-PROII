@@ -93,7 +93,7 @@ public class Cliente {
         for (int i = 0; i < cuentas.length; i++) {
             nuevas[i] = cuentas[i];
         }
-        nuevas[nuevas.length - 1] = cuenta;
+        nuevas[getNumCuentas()] = cuenta;
         cuentas = nuevas;
     }
 
