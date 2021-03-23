@@ -105,12 +105,23 @@ public class Ilc {
      *
      * @param coleccion La coleccion en la que se elimina el cliente
      */
-    private void eliminaCliente(Banco coleccion) {
+    private void eliminaCliente(Banco coleccion) throws Exception {
         System.out.println("\n------------");
         System.out.println("\nBaja cliente\n");
 
         if (coleccion.getNumClientes() > 0) {
-            coleccion.elimina(leePosCliente(coleccion));
+            System.out.println("\t1. Por posición\n\t2. Por DNI");
+            int opcion;
+            do {
+                opcion = leeEntero("->");
+            } while (opcion < 1 || opcion > 2);
+            if (opcion == 1) {
+                coleccion.elimina(leePosCliente(coleccion));
+            } else {
+                Scanner scanner = new Scanner(System.in);
+                System.out.print("DNI: ");
+                coleccion.elimina(scanner.nextLine().trim());
+            }
         } else {
             System.out.println("La coleccion no contiene clientes.");
         }
@@ -184,8 +195,15 @@ public class Ilc {
         Cuenta.Tipo tipo = leerTipoCuenta();
         String numCuenta = leeCadena("\tNúmero de cuenta: ");
         int anho = leeEntero("\tAño de apertura: ");
+        double saldo;
+        do {
+            saldo = leeReal("\tSaldo inicial: ");
+            if (saldo < Cuenta.MIN_SALDO) {
+                System.err.format("El saldo no puede ser menor que %#.2f\n", Cuenta.MIN_SALDO);
+            }
+        } while (saldo < Cuenta.MIN_SALDO);
 
-        return new Cuenta(numCuenta, anho, tipo);
+        return new Cuenta(numCuenta, anho, tipo, saldo);
     }
 
     /**
@@ -265,9 +283,8 @@ public class Ilc {
      *
      * @param cuenta Objeto Cuenta a modificar
      */
-    private void modificaCuenta(Cuenta cuenta) {
+    private void modificaCuenta(Cuenta cuenta) throws Exception {
         String numCuenta;
-
         String temp;
 
         numCuenta = leeCadena("\tNúmero de cuenta ["
@@ -281,7 +298,15 @@ public class Ilc {
         if (!temp.isEmpty()) {
             cuenta.setAnho(Integer.parseInt(temp));
         }
-        cuenta.setTipo(leerTipoCuenta(cuenta.getTipo()));
+        temp = leeCadena("\tTipo de cuenta [" + cuenta.getTipo().name().toLowerCase()
+                + "] (Introduce cualquier carácter para cambiarla): ", true);
+        if (!temp.isEmpty()) {
+            cuenta.setTipo(leerTipoCuenta(cuenta.getTipo()));
+        }
+        temp = leeCadena(String.format("\tSaldo [%#.2f]:", cuenta.getSaldo()), true);
+        if (!temp.isEmpty()) {
+            cuenta.setSaldo(Double.parseDouble(temp));
+        }
     }
 
     /**
@@ -360,28 +385,7 @@ public class Ilc {
         return toret - 1;
     }
 
-    /**
-     * Visualiza los clientes almacenados en la coleccion por la salida std.
-     *
-     * @param coleccion El objeto Banco del que visualizar sus clientes.
-     */
-    /*private void visualiza(Banco coleccion) {
-        System.out.println("\n--------------------");
-        System.out.println("\nListar clientes\n");
-
-        final int numClientes = coleccion.getNumClientes();
-
-        if (numClientes > 0) {
-            for (int i = 0; i < numClientes; i++) {
-                System.out.print((i + 1) + ". ");
-                System.out.println(coleccion.get(i).toString());
-            }
-        } else {
-            System.out.println("No hay clientes.");
-        }
-    }*/
-
- /* -------------------------------------------------------------*/
+    /* -------------------------------------------------------------*/
     //  METODOS PARA LA LECTURA DE DATOS DEL TECLADO
     /* -------------------------------------------------------------*/
     /**
@@ -442,5 +446,27 @@ public class Ilc {
         } while (!esValido);
 
         return leer;
+    }
+
+    /**
+     * Lee un número real del teclado
+     *
+     * @param mensaje Literal que especifica lo que el usuario debe introducir
+     * @return double Real leido del teclado
+     */
+    private static double leeReal(String mensaje) {
+        Scanner scanner = new Scanner(System.in);
+        boolean seguir = true;
+        double toret = 0;
+        do {
+            try {
+                System.out.print(mensaje);
+                toret = Double.parseDouble(scanner.nextLine().trim());
+                seguir = false;
+            } catch (NumberFormatException ex) {
+                System.err.println("Formato de número incorrecto, introducelo de nuevo ");
+            }
+        } while (seguir);
+        return toret;
     }
 }
