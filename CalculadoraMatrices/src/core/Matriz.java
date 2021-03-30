@@ -80,13 +80,23 @@ public class Matriz {
         }
         double[][] multiplicacion = new double[numFilas][m.getNumColumnas()];
         for (int i = 0; i < numFilas; i++) {
-            for (int j = 0; j < numColumnas; j++) {
-                for (int k = 0; k < m.getNumFilas(); k++) {
-                    multiplicacion[i][j] += numeros[i][j] * m.get(k, j);
+            for (int j = 0; j < m.getNumColumnas(); j++) {
+                for (int k = 0; k < numColumnas; k++) {
+                    multiplicacion[i][j] += numeros[i][k] * m.get(k, j);
                 }
             }
         }
         return new Matriz(multiplicacion);
+    }
+
+    public Matriz traspuesta() {
+        double[][] m = new double[numeros[0].length][numeros.length];
+        for (int i = 0; i < numeros.length; i++) {
+            for (int j = 0; j < numeros[0].length; j++) {
+                m[j][i] = numeros[i][j];
+            }
+        }
+        return new Matriz(m);
     }
 
     @Override

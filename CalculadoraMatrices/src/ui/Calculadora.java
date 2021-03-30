@@ -25,4 +25,8 @@ public class Calculadora {
     public void multiplicar(Matriz m) throws Exception {
         resultado = resultado.multiplicar(m);
     }
+
+    public void traspuesta() {
+        resultado = resultado.traspuesta();
+    }
 }

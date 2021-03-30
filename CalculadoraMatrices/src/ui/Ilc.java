@@ -21,16 +21,18 @@ public class Ilc {
                         calc.sumar(leerMatriz());
                     case 2 ->
                         calc.multiplicar(leerMatriz());
+                    case 3 ->
+                        calc.traspuesta();
                 }
                 System.out.println(calc.getResultado());
             } catch (Exception ex) {
                 System.err.println("Error: " + ex.getMessage());
             }
-        } while (opcion != 3);
+        } while (opcion != 4);
     }
 
     public static int menu() {
-        System.out.println("1. Sumar\n2. Multiplicar\n3. Salir");
+        System.out.println("1. Sumar\n2. Multiplicar\n3. Traspuesta\n4. Salir");
         return Ilc.leerEntero("->");
     }
 
