@@ -85,19 +85,19 @@ public class Banco {
                 cliente = new StringBuilder();
                 for (int j = 0; j < clientes[i].getNumCuentas(); j++) {
                     if (clientes[i].getCuenta(j).getTipo().equals(tipo)) {
-                        cliente.append("\t");
-                        cliente.append(clientes[i].getCuenta(j).toString());
-                        cliente.append("\n");
+                        cliente.append("\t")
+                                .append(clientes[i].getCuenta(j).toString())
+                                .append("\n");
                     }
                 }
 
                 if (cliente.length() != 0) {
-                    toret.append("El cliente ");
-                    toret.append(clientes[i].getNombre());
-                    toret.append(" tiene las siguientes cuentas del tipo ");
-                    toret.append(tipo.name().toLowerCase());
-                    toret.append("\n");
-                    toret.append(cliente);
+                    toret.append("El cliente ")
+                            .append(clientes[i].getNombre())
+                            .append(" tiene las siguientes cuentas del tipo ")
+                            .append(tipo.name().toLowerCase())
+                            .append("\n")
+                            .append(cliente);
                 }
             }
         }
@@ -111,11 +111,23 @@ public class Banco {
      * @param pos el lugar del cliente en el vector de clientes
      */
     public void elimina(int pos) {
-//        for (int i = pos; i < getNumClientes() - 1; i++) {
-//            clientes[i] = clientes[i + 1];
-//        }
-//        numClientes--;
         clientes[pos] = clientes[--numClientes];
+    }
+
+    /**
+     * Elimina un cliente
+     *
+     * @param dni Dni del cliente
+     */
+    public void elimina(String dni) throws Exception {
+        int i = 0;
+        while (i < getNumClientes() && !clientes[i].getDni().equals(dni)) {
+            i++;
+        }
+        if (i >= getNumClientes()) {
+            throw new Exception("No hay ningún cliente con ese DNI");
+        }
+        clientes[i] = clientes[--numClientes];
     }
 
     /**
