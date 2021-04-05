@@ -21,6 +21,8 @@ import java.time.LocalTime;
  */
 public class Poster extends Comunicacion {
 
+    private final int MIN_HORAS = 4;
+
     private String nombreSesion;
     private LocalTime horaInicio;
     private Duration duracion;
@@ -123,8 +125,8 @@ public class Poster extends Comunicacion {
     }
 
     public void setDuracion(Duration duracion) throws ExcedeDuracionException {
-        if (duracion.getSeconds() < 4 * 3600) {
-            throw new ExcedeDuracionException("Duración de la sesión sobrepasada en " + (4 * 3600 - duracion.getSeconds()) + " segundos");
+        if (duracion.getSeconds() < MIN_HORAS * 3600) {
+            throw new ExcedeDuracionException("Duración de la sesión sobrepasada en " + (MIN_HORAS * 3600 - duracion.getSeconds()) + " segundos");
         }
         this.duracion = duracion;
     }

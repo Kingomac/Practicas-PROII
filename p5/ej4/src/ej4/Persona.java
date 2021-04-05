@@ -11,7 +11,7 @@ package ej4;
  *
  * @author Mario
  */
-public class Persona {
+public abstract class Persona {
 
     private final String dni;
     private String nombre;
