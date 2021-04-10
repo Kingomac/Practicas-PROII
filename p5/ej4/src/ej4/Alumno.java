@@ -15,8 +15,8 @@ public class Alumno extends Persona {
 
     private String planEstudios;
 
-    public Alumno(String planEstudios, String dni, String nombre) {
-        super(dni, nombre);
+    public Alumno(String planEstudios, String dni, String nombre, String apellidos, Fecha fechaNacimiento) {
+        super(dni, nombre, apellidos, fechaNacimiento);
         this.planEstudios = planEstudios;
     }
 

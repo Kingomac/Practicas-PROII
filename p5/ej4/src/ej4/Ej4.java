@@ -55,9 +55,11 @@ public class Ej4 {
 
     private static Persona leerPersona() {
         int opcion;
-        Persona toret = new Alumno("", "", "");
+        Persona toret = new Alumno("", "", "", "", new Fecha(0, 0, 0));
         String nombre = leerCadena("Nombre: ");
+        String apellidos = leerCadena("Apellidos: ");
         String dni = leerCadena("DNI: ");
+        Fecha fechaNacimiento = leerFecha("Fecha de nacimiento: ");
 
         String planEstudios;
 
@@ -72,15 +74,42 @@ public class Ej4 {
         switch (opcion) {
             case 1:
                 planEstudios = leerCadena("Plan de estudios: ");
-                toret = new Alumno(planEstudios, dni, nombre);
+                toret = new Alumno(planEstudios, dni, nombre, apellidos, fechaNacimiento);
                 break;
             case 2:
                 despacho = leerEntero("Despacho: ");
                 asignatura = leerCadena("Asignatura: ");
-                toret = new Profesor(despacho, asignatura, dni, nombre);
+                toret = new Profesor(despacho, asignatura, dni, nombre, apellidos, fechaNacimiento);
         }
         return toret;
 
+    }
+
+    private static Fecha leerFecha(String mensaje) {
+        int dia, mes, anho;
+        boolean seguir;
+        do {
+            System.out.println(mensaje);
+            dia = leerEntero("\tDía: ");
+            mes = leerEntero("\tMes: ");
+            anho = leerEntero("\tAño: ");
+            seguir = true;
+            if (dia > 31 || mes > 12 || anho < 1900) {
+                seguir = false;
+            } else if (mes == 2 && dia > 28) {
+                seguir = false;
+            } else if (mes == 2 && dia > 29 && anho % 4 == 0 && anho % 100 != 0 && anho % 400 == 0) {
+                seguir = false;
+            } else if (mes % 2 != 0 && dia != 31) {
+                seguir = false;
+            } else if (mes % 2 == 0 && dia != 30) {
+                seguir = false;
+            }
+            if (!seguir) {
+                System.err.println("Introduce una fecha válida");
+            }
+        } while (seguir);
+        return new Fecha(dia, mes, anho);
     }
 
     private static int leerEntero(String mensaje) {

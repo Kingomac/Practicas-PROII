@@ -15,10 +15,14 @@ public abstract class Persona {
 
     private final String dni;
     private String nombre;
+    private String apellidos;
+    private Fecha fechaNacimiento;
 
-    public Persona(String dni, String nombre) {
+    public Persona(String dni, String nombre, String apellidos, Fecha fechaNacimiento) {
         this.dni = dni;
         this.nombre = nombre;
+        this.fechaNacimiento = fechaNacimiento;
+        this.apellidos = apellidos;
     }
 
     public String getDni() {
@@ -33,9 +37,29 @@ public abstract class Persona {
         this.nombre = nombre;
     }
 
+    public Fecha getFechaNacimiento() {
+        return fechaNacimiento;
+    }
+
+    public void setFechaNacimiento(Fecha fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
+    }
+
+    public String getApellidos() {
+        return apellidos;
+    }
+
+    public void setApellidos(String apellidos) {
+        this.apellidos = apellidos;
+    }
+
     @Override
     public String toString() {
-        return String.format("%s - %s", dni, nombre);
+        StringBuilder toret = new StringBuilder();
+        toret.append("DNI: ").append(getDni()).append("; Nombre: ")
+                .append(getNombre()).append("; Fecha de nacimiento: ")
+                .append(getFechaNacimiento());
+        return toret.toString();
     }
 
 }
