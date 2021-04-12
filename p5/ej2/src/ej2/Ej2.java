@@ -2,6 +2,7 @@ package ej2;
 
 import ej3.Publicacion;
 import ej5.Autor;
+import ej5.Fecha;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.util.Scanner;
@@ -26,8 +27,8 @@ public class Ej2 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Autor autor1 = new Autor("Rodríguez Rodríguez", "Pepe", "dj893d23h7d782g");
-        Autor autor2 = new Autor("García García", "José", "kjdhjksh34dk23sa");
+        Autor autor1 = new Autor("Rodríguez Rodríguez", "Pepe", "dj893d23h7d782g", new Fecha(20, 2, 2007));
+        Autor autor2 = new Autor("García García", "José", "kjdhjksh34dk23sa", new Fecha(15, 9, 2016));
         Comunicacion com = new Comunicacion("Congreso", "Ourense", "España", "Título", 2021, 0, autor1);
         Poster p1 = new Poster(com, "Sesión 1", 10, 0, 5 * 60, 0);
         Poster p2 = new Poster(com, "Sesión 2", LocalTime.of(19, 30), Duration.ofHours(4).plusMinutes(15), 0, autor1, autor2);
@@ -111,6 +112,33 @@ public class Ej2 {
         return toret;
     }
 
+    private static Fecha leerFecha(String mensaje) {
+        int dia, mes, anho;
+        boolean seguir;
+        do {
+            System.out.println(mensaje);
+            dia = leerEntero("\tDía: ");
+            mes = leerEntero("\tMes: ");
+            anho = leerEntero("\tAño: ");
+            seguir = true;
+            if (dia > 31 || mes > 12 || anho < 1900) {
+                seguir = false;
+            } else if (mes == 2 && dia > 28) {
+                seguir = false;
+            } else if (mes == 2 && dia > 29 && anho % 4 == 0 && anho % 100 != 0 && anho % 400 == 0) {
+                seguir = false;
+            } else if (mes % 2 != 0 && dia != 31) {
+                seguir = false;
+            } else if (mes % 2 == 0 && dia != 30) {
+                seguir = false;
+            }
+            if (!seguir) {
+                System.err.println("Introduce una fecha válida");
+            }
+        } while (seguir);
+        return new Fecha(dia, mes, anho);
+    }
+
     private static Autor[] leerArrayAutores(String mensaje) {
         Autor[] toret;
         int num;
@@ -120,7 +148,7 @@ public class Ej2 {
         for (int i = 0; i < num; i++) {
             System.out.println("Autor " + (i + 1));
             toret[i] = new Autor(leerCadena("Apellidos: "), leerCadena("Nombre: "),
-                    leerCadena("ORCID: "));
+                    leerCadena("ORCID: "), leerFecha("Fecha de ingreso: "));
         }
         return toret;
     }

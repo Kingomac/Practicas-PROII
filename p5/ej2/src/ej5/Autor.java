@@ -17,11 +17,13 @@ public class Autor {
     private String nombre;
     private final String orcid;
     private double indiceH;
+    private Fecha ingreso;
 
-    public Autor(String apellidos, String nombre, String orcid) {
+    public Autor(String apellidos, String nombre, String orcid, Fecha ingreso) {
         this.apellidos = apellidos;
         this.nombre = nombre;
         this.orcid = orcid;
+        this.ingreso = ingreso;
     }
 
     public String getApellidos() {
@@ -50,6 +52,14 @@ public class Autor {
 
     public void setIndiceH(double indiceH) {
         this.indiceH = indiceH;
+    }
+
+    public Fecha getIngreso() {
+        return ingreso;
+    }
+
+    public void setIngreso(Fecha ingreso) {
+        this.ingreso = ingreso;
     }
 
     @Override
