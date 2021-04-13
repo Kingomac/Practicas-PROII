@@ -9,13 +9,13 @@ package es.uvigo.esei.pro2.core;
  *
  * @author Mario
  */
-public class FechaFormatoException extends Exception {
+public class FechaFormatoExcepcion extends Exception {
 
     /**
      * Creates a new instance of <code>FechaFormatoException</code> without
      * detail message.
      */
-    public FechaFormatoException() {
+    public FechaFormatoExcepcion() {
     }
 
     /**
@@ -24,7 +24,7 @@ public class FechaFormatoException extends Exception {
      *
      * @param msg the detail message.
      */
-    public FechaFormatoException(String msg) {
+    public FechaFormatoExcepcion(String msg) {
         super(msg);
     }
 }

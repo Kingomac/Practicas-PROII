@@ -8,20 +8,20 @@ import java.util.Calendar;
  */
 public class Fecha {
 
-    public static Fecha parse(String fecha) throws FechaFormatoException, NumberFormatException {
+    public static Fecha parseFecha(String fecha) throws FechaFormatoExcepcion, NumberFormatException {
         int dia;
         int mes;
         int anho;
         String[] temp = fecha.split("/");
 
         if (temp.length != 3) {
-            throw new FechaFormatoException();
+            throw new FechaFormatoExcepcion();
         }
         dia = Integer.parseInt(temp[0]);
         mes = Integer.parseInt(temp[1]);
         anho = Integer.parseInt(temp[2]);
         if (!correcta(dia, mes, anho)) {
-            throw new FechaFormatoException();
+            throw new FechaFormatoExcepcion();
         }
         return new Fecha(dia, mes, anho);
     }
@@ -53,7 +53,10 @@ public class Fecha {
         return dia;
     }
 
-    public void setDia(int dia) {
+    public void setDia(int dia) throws FechaFormatoExcepcion {
+        if (!correcta(dia, getMes(), getAnho())) {
+            throw new FechaFormatoExcepcion();
+        }
         this.dia = dia;
     }
 
@@ -61,7 +64,10 @@ public class Fecha {
         return mes;
     }
 
-    public void setMes(int mes) {
+    public void setMes(int mes) throws FechaFormatoExcepcion {
+        if (!correcta(getDia(), mes, getAnho())) {
+            throw new FechaFormatoExcepcion();
+        }
         this.mes = mes;
     }
 
@@ -69,7 +75,19 @@ public class Fecha {
         return anho;
     }
 
-    public void setAnho(int anho) {
+    public void setAnho(int anho) throws FechaFormatoExcepcion {
+        if (!correcta(getDia(), getMes(), anho)) {
+            throw new FechaFormatoExcepcion();
+        }
+        this.anho = anho;
+    }
+
+    public void set(int dia, int mes, int anho) throws FechaFormatoExcepcion {
+        if (!correcta(dia, mes, anho)) {
+            throw new FechaFormatoExcepcion();
+        }
+        this.dia = dia;
+        this.mes = mes;
         this.anho = anho;
     }
 

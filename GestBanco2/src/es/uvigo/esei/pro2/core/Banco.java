@@ -31,9 +31,9 @@ public class Banco {
      * @param pos el lugar del cliente en el vector de clientes
      * @return el objeto Cliente correspondiente.
      */
-    public Cliente get(int pos) throws Exception {
+    public Cliente get(int pos) throws ClienteIndiceExcepcion {
         if (pos >= getNumClientes()) {
-            throw new Exception("get(): sobrepasa la pos: " + (pos + 1)
+            throw new ClienteIndiceExcepcion("get(): sobrepasa la pos: " + (pos + 1)
                     + " / " + getMaxClientes());
         }
 
@@ -63,11 +63,11 @@ public class Banco {
      *
      * @param c el nuevo objeto Cliente
      */
-    public void inserta(Cliente c) throws Exception {
+    public void inserta(Cliente c) throws DemasiadosClientesExcepcion {
         final int maxClientes = getMaxClientes();
 
         if (getNumClientes() >= maxClientes) {
-            throw new Exception("inserta(): sobrepasa max.: " + maxClientes);
+            throw new DemasiadosClientesExcepcion("inserta(): sobrepasa max.: " + maxClientes);
         }
 
         clientes[numClientes] = c;
@@ -93,7 +93,7 @@ public class Banco {
      * @param tipo
      * @return los datos del banco, como cadena
      */
-    public String listarCuentas(int tipo) throws Exception {
+    public String listarCuentas(int tipo) throws CuentaIndiceExcepcion {
         StringBuilder toret = new StringBuilder();
         StringBuilder cliente;
         final int numClientes = getNumClientes();

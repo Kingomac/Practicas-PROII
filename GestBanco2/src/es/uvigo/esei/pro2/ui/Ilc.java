@@ -3,10 +3,14 @@ package es.uvigo.esei.pro2.ui;
 import es.uvigo.esei.pro2.core.Ahorro;
 import es.uvigo.esei.pro2.core.Banco;
 import es.uvigo.esei.pro2.core.Cliente;
+import es.uvigo.esei.pro2.core.ClienteIndiceExcepcion;
 import es.uvigo.esei.pro2.core.Corriente;
 import es.uvigo.esei.pro2.core.Cuenta;
+import es.uvigo.esei.pro2.core.CuentaIndiceExcepcion;
+import es.uvigo.esei.pro2.core.DemasiadosClientesExcepcion;
 import es.uvigo.esei.pro2.core.Fecha;
-import es.uvigo.esei.pro2.core.FechaFormatoException;
+import es.uvigo.esei.pro2.core.FechaFormatoExcepcion;
+import es.uvigo.esei.pro2.core.SinCuentasExcepcion;
 import java.util.Scanner;
 
 /**
@@ -58,8 +62,14 @@ public class Ilc {
                         System.out.println("No es correcta esa opción"
                                 + " ( " + op + " )");
                 }
-            } catch (Exception exc) {
-                System.err.println("Error. " + exc.getMessage());
+            } catch (DemasiadosClientesExcepcion ex) {
+                System.err.println("Número máximo de clientes alcanzados: " + ex.getMessage());
+            } catch (SinCuentasExcepcion ex) {
+                System.err.println("El cliente debe tener como mínimo una cuenta");
+            } catch (CuentaIndiceExcepcion ex) {
+                System.err.println("No existe la cuenta con ese índice: " + ex.getMessage());
+            } catch (ClienteIndiceExcepcion ex) {
+                System.err.println("No existe un cliente con ese índice: " + ex.getMessage());
             }
 
         } while (op != 0);
@@ -98,7 +108,7 @@ public class Ilc {
      *
      * @param coleccion La coleccion en la que se inserta el cliente.
      */
-    private void insertaCliente(Banco coleccion) throws Exception {
+    private void insertaCliente(Banco coleccion) throws DemasiadosClientesExcepcion {
         System.out.println("\n------------");
         System.out.println("\nAlta cliente");
 
@@ -127,7 +137,7 @@ public class Ilc {
      *
      * @param coleccion La coleccion de la cual modificar un cliente.
      */
-    private void modificaCliente(Banco coleccion) throws Exception {
+    private void modificaCliente(Banco coleccion) throws ClienteIndiceExcepcion, CuentaIndiceExcepcion, SinCuentasExcepcion {
         System.out.println("\n--------------------");
         System.out.println("\nModificación cliente");
 
@@ -212,11 +222,11 @@ public class Ilc {
             System.out.println(mensaje);
             temp = leeCadena("(dd/mm/yyy): ");
             try {
-                return Fecha.parse(temp);
+                return Fecha.parseFecha(temp);
+            } catch (FechaFormatoExcepcion ex) {
+                System.err.println("Formato de fecha no válido");
             } catch (NumberFormatException ex) {
-                System.err.println("Debes introducir números enteros");
-            } catch (FechaFormatoException ex) {
-                System.err.println("Formato de fecha incorrecto");
+                System.err.println("La fecha debe estar definida por enteros");
             }
         }
     }
@@ -250,7 +260,7 @@ public class Ilc {
      *
      * @param c Objeto Cliente a modificar
      */
-    private void modificaCliente(Cliente c) throws Exception {
+    private void modificaCliente(Cliente c) throws CuentaIndiceExcepcion, SinCuentasExcepcion {
         int op;
 
         System.out.println("\nModificando los datos del siguiente cliente:");
@@ -338,9 +348,11 @@ public class Ilc {
                 true);
         if (!temp.isEmpty()) {
             try {
-                cuenta.setFechaApertura(Fecha.parse(temp));
-            } catch (Exception ex) {
-                System.err.println("Error: no se ha cambiado la fecha");
+                cuenta.setFechaApertura(Fecha.parseFecha(temp));
+            } catch (FechaFormatoExcepcion ex) {
+                System.err.println("Formato de fecha incorrecto");
+            } catch (NumberFormatException ex) {
+                System.err.println("Las fechas deben estar definidas por enteros");
             }
         }
 
@@ -397,7 +409,7 @@ public class Ilc {
      *
      * @param coleccion El Banco del que se listan las cuentas.
      */
-    public String listarPorTipoCuenta(Banco coleccion) throws Exception {
+    public String listarPorTipoCuenta(Banco coleccion) throws CuentaIndiceExcepcion {
         return coleccion.listarCuentas(leeTipoCuenta());
     }
 

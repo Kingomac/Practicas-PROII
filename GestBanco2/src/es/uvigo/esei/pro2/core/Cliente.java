@@ -114,10 +114,9 @@ public class Cliente {
      * @param cuenta el índice de la cuenta (empezando en 0)
      * @return la Cuenta que se encuentra en la posición especificada
      */
-    public Cuenta getCuenta(int cuenta) throws Exception
-    {
-        if ((cuenta < 0) || (cuenta >= getNumCuentas())) {           
-            throw new Exception ("La posicion indicada no es valida.");
+    public Cuenta getCuenta(int cuenta) throws CuentaIndiceExcepcion {
+        if ((cuenta < 0) || (cuenta >= getNumCuentas())) {
+            throw new CuentaIndiceExcepcion("La posicion indicada no es valida.");
         }
 
         return this.cuentas[cuenta];
@@ -128,13 +127,12 @@ public class Cliente {
      *
      * @param pos el índice de la cuenta que se quiere eliminar (empezando en 0)
      */
-    public void eliminaCuenta(int pos) throws Exception
-    {
+    public void eliminaCuenta(int pos) throws SinCuentasExcepcion {
         Cuenta[] nuevasCuentas;
         int indiceNuevasCuentas;
 
         if (getNumCuentas() == 1) {
-            throw new Exception("El cliente debe tener como minimo "
+            throw new SinCuentasExcepcion("El cliente debe tener como minimo "
                     + "una cuenta");
         } else {
             nuevasCuentas = new Cuenta[getNumCuentas() - 1];
@@ -148,7 +146,7 @@ public class Cliente {
             this.cuentas = nuevasCuentas;
         }
     }
-    
+
     /**
      * Devuelve los datos del Cliente
      *

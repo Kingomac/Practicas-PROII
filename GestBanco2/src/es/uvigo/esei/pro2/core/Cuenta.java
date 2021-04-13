@@ -76,7 +76,7 @@ public abstract class Cuenta {
         StringBuilder toret = new StringBuilder();
 
         toret.append("Cuenta numero ").append(getNumCuenta());
-        toret.append("; Anho de apertura: ").append(getFechaApertura());
+        toret.append("; Año de apertura: ").append(getFechaApertura());
 
         return toret.toString();
     }
