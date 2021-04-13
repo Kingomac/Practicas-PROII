@@ -25,4 +25,12 @@ public class ReunionPeriodica extends Reunion {
         this.frecuencia = frecuencia;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder toret = new StringBuilder();
+        toret.append(super.toString());
+        toret.append("\n\tFrecuencia: ").append(getFrecuencia().name().toLowerCase());
+        return toret.toString();
+    }
+
 }

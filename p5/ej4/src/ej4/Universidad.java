@@ -6,16 +6,14 @@ package ej4;
  */
 public class Universidad {
 
-    private final int MAX_PERSONAS;
     private Persona[] personas;
     private String nombre;
     private int numPersonas;
 
-    public Universidad(int MAX_PERSONAS, String nombre) {
-        this.MAX_PERSONAS = MAX_PERSONAS;
+    public Universidad(int maxPersonas, String nombre) {
         this.nombre = nombre;
         numPersonas = 0;
-        personas = new Persona[MAX_PERSONAS];
+        personas = new Persona[maxPersonas];
     }
 
     public String getNombre() {
@@ -27,21 +25,45 @@ public class Universidad {
     }
 
     public int getMaxPersonas() {
-        return MAX_PERSONAS;
+        return personas.length;
     }
 
     public void insertar(Persona p) throws Exception {
-        if (numPersonas == MAX_PERSONAS) {
+        if (numPersonas == personas.length) {
             throw new Exception("Número máximo de personas alcanzado");
         }
         personas[numPersonas++] = p;
     }
 
     public void borrar(int i) throws Exception {
-        if (i < 0 || i > numPersonas) {
+        if (i < 0 || i >= numPersonas) {
             throw new Exception("La posición no es válida");
         }
         personas[i] = personas[--numPersonas];
+    }
+
+    public String listar(int opc) {
+        StringBuilder toret = new StringBuilder();
+        for (int i = 0; i < numPersonas; i++) {
+            switch (opc) {
+                case 1:
+                    if (personas[i] instanceof Alumno) {
+                        toret.append(personas[i]);
+                    }
+                    break;
+                case 2:
+                    if (personas[i] instanceof Erasmus) {
+                        toret.append(personas[i]);
+                    }
+                    break;
+                case 3:
+                    if (personas[i] instanceof Profesor) {
+                        toret.append(personas[i]);
+                    }
+            }
+            toret.append("\n");
+        }
+        return toret.toString();
     }
 
     @Override

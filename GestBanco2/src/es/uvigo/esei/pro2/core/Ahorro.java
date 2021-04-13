@@ -1,5 +1,7 @@
 package es.uvigo.esei.pro2.core;
 
+import java.text.DecimalFormat;
+
 /**
  *
  * @author Mario
@@ -22,7 +24,15 @@ public class Ahorro extends Cuenta {
     }
 
     @Override
+    public int getTipo() {
+        return 0;
+    }
+
+    @Override
     public String toString() {
-        return String.format("%s; Intereses: %.2f", super.toString(), getInteres());
+        DecimalFormat format = new DecimalFormat("0.00");
+        StringBuilder toret = new StringBuilder(super.toString());
+        toret.append("; Intereses: ").append(format.format(getInteres())).append("%");
+        return toret.toString();
     }
 }

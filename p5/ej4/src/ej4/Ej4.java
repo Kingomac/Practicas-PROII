@@ -33,7 +33,8 @@ public class Ej4 {
             System.out.println("\t1. Insertar");
             System.out.println("\t2. Borrar");
             System.out.println("\t3. Mostrar");
-            System.out.println("\t4. Salir");
+            System.out.println("\t4. Listar");
+            System.out.println("\t5. Salir");
 
             opcion = leerEntero("-> ");
             try {
@@ -46,11 +47,23 @@ public class Ej4 {
                         break;
                     case 3:
                         System.out.println(uni);
+                        break;
+                    case 4:
+                        listar(uni);
                 }
             } catch (Exception ex) {
                 System.err.println("Error: " + ex);
             }
-        } while (opcion != 4);
+        } while (opcion != 5);
+    }
+
+    private static void listar(Universidad uni) {
+        int opc;
+        do {
+            System.out.println("1. Alumno\n2. Eramus\n3. Profesor");
+            opc = leerEntero("-> ");
+        } while (opc < 1 || opc > 3);
+        System.out.println(uni.listar(opc));
     }
 
     private static Persona leerPersona() {
@@ -62,6 +75,7 @@ public class Ej4 {
         Fecha fechaNacimiento = leerFecha("Fecha de nacimiento: ");
 
         String planEstudios;
+        String universidadProcedencia;
 
         int despacho;
         String asignatura;
@@ -74,12 +88,18 @@ public class Ej4 {
         switch (opcion) {
             case 1:
                 planEstudios = leerCadena("Plan de estudios: ");
-                toret = new Alumno(planEstudios, dni, nombre, apellidos, fechaNacimiento);
+                universidadProcedencia = leerCadenaNoObligatoria("Universidad de procedencia (solo Erasmus): ");
+                if ("".equals(universidadProcedencia)) {
+                    toret = new Alumno(planEstudios, dni, nombre, apellidos, fechaNacimiento);
+                } else {
+                    toret = new Erasmus(universidadProcedencia, planEstudios, dni, nombre, apellidos, fechaNacimiento);
+                }
                 break;
             case 2:
                 despacho = leerEntero("Despacho: ");
                 asignatura = leerCadena("Asignatura: ");
                 toret = new Profesor(despacho, asignatura, dni, nombre, apellidos, fechaNacimiento);
+                break;
         }
         return toret;
 
@@ -94,20 +114,20 @@ public class Ej4 {
             mes = leerEntero("\tMes: ");
             anho = leerEntero("\tAño: ");
             seguir = true;
-            if (dia > 31 || mes > 12 || anho < 1900) {
-                seguir = false;
-            } else if (mes == 2 && dia > 28) {
-                seguir = false;
-            } else if (mes == 2 && dia > 29 && anho % 4 == 0 && anho % 100 != 0 && anho % 400 == 0) {
-                seguir = false;
-            } else if (mes % 2 != 0 && dia != 31) {
-                seguir = false;
-            } else if (mes % 2 == 0 && dia != 30) {
-                seguir = false;
-            }
-            if (!seguir) {
-                System.err.println("Introduce una fecha válida");
-            }
+//            if (dia > 31 || mes > 12 || anho < 1900) {
+//                seguir = false;
+//            } else if (mes == 2 && dia > 28 && (anho % 4 != 0 || anho % 100 == 0 || anho % 400 != 0)) {
+//                seguir = false;
+//            } else if (mes == 2 && dia > 29 && anho % 4 == 0 && anho % 100 != 0 && anho % 400 == 0) {
+//                seguir = false;
+//            } else if (mes % 2 != 0 && dia != 31) {
+//                seguir = false;
+//            } else if (mes % 2 == 0 && dia != 30) {
+//                seguir = false;
+//            }
+//            if (!seguir) {
+//                System.err.println("Introduce una fecha válida");
+//            }
         } while (seguir);
         return new Fecha(dia, mes, anho);
     }
@@ -131,6 +151,14 @@ public class Ej4 {
             System.out.print(mensaje);
             toret = scan.nextLine().trim();
         } while ("".equals(toret));
+        return toret;
+    }
+
+    private static String leerCadenaNoObligatoria(String mensaje) {
+        Scanner scan = new Scanner(System.in);
+        String toret;
+        System.out.print(mensaje);
+        toret = scan.nextLine().trim();
         return toret;
     }
 

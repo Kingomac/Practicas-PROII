@@ -187,29 +187,30 @@ public class Ilc {
      * @return El objeto Cuenta creado
      */
     private Cuenta leerCuenta() {
-        Class<Cuenta> tipo;
+        int tipo;
 
         String numCuenta = leeCadena("\tNumero de cuenta: ");
-        Fecha apertura = leeFecha("Fecha de apertura: ");
+        Fecha apertura = leeFecha("\tFecha de apertura: ");
 
         tipo = leeTipoCuenta();
 
         return leerCuentaTipo(tipo, numCuenta, apertura);
     }
 
-    private Cuenta leerCuentaTipo(Class<Cuenta> tipo, String numCuenta, Fecha apertura) {
-        if (tipo.equals(Ahorro.class.getClass())) {
-            return new Ahorro(leeEntero("\tAño: "), numCuenta, apertura);
-        }
-        return new Corriente(leeCadena("\tNúmero de tarjeta: "), leeFecha("\tFecha de caducidad: "), numCuenta, apertura);
+    private Cuenta leerCuentaTipo(int tipo, String numCuenta, Fecha apertura) {
+        return switch (tipo) {
+            case 0 ->
+                new Ahorro(leeDecimal("\tInterés (%): "), numCuenta, apertura);
+            default ->
+                new Corriente(leeCadena("\tNúmero de tarjeta: "), leeFecha("\tFecha de caducidad: "), numCuenta, apertura);
+        };
     }
 
     private static Fecha leeFecha(String mensaje) {
         String temp;
-        Scanner scan = new Scanner(System.in);
         while (true) {
             System.out.println(mensaje);
-            temp = scan.nextLine().trim();
+            temp = leeCadena("(dd/mm/yyy): ");
             try {
                 return Fecha.parse(temp);
             } catch (NumberFormatException ex) {
@@ -220,28 +221,28 @@ public class Ilc {
         }
     }
 
-    private Class<Cuenta> leeTipoCuenta(Class<Cuenta> tipoActual) {
+    private int leeTipoCuenta(int tipoActual) {
         int opc;
         do {
             System.out.println("Tipos de cuentas:");
-            for (int i = 0; i < Cuenta.getExtensiones().length; i++) {
-                System.out.format("\t%s%d. %s", Cuenta.getExtensiones()[i].equals(tipoActual) ? "*" : "", i + 1, Cuenta.getExtensiones()[i].getName());
+            for (int i = 0; i < Cuenta.getTipos().length; i++) {
+                System.out.format("\t%s%d. %s\n", tipoActual == i ? "*" : "", i + 1, Cuenta.getTipos()[i]);
             }
             opc = leeEntero("-> ");
-        } while (opc < 1 || opc > Cuenta.getExtensiones().length);
-        return Cuenta.getExtensiones()[opc - 1];
+        } while (opc < 1 || opc > 2);
+        return opc - 1;
     }
 
-    private Class<Cuenta> leeTipoCuenta() {
+    private int leeTipoCuenta() {
         int opc;
         do {
             System.out.println("Tipos de cuentas:");
-            for (int i = 0; i < Cuenta.getExtensiones().length; i++) {
-                System.out.format("\t%d. %s", i + 1, Cuenta.getExtensiones()[i].getCanonicalName());
+            for (int i = 0; i < Cuenta.getTipos().length; i++) {
+                System.out.format("\t%d. %s\n", i + 1, Cuenta.getTipos()[i]);
             }
             opc = leeEntero("-> ");
-        } while (opc < 1 || opc > Cuenta.getExtensiones().length);
-        return Cuenta.getExtensiones()[opc - 1];
+        } while (opc < 1 || opc > Cuenta.getTipos().length);
+        return opc - 1;
     }
 
     /**
@@ -324,7 +325,7 @@ public class Ilc {
     private Cuenta modificaCuenta(Cuenta cuenta) {
         String numCuenta;
 
-        Class<Cuenta> tipo;
+        int tipo;
         String temp;
 
         numCuenta = leeCadena("\tNúmero de cuenta ["
@@ -344,8 +345,11 @@ public class Ilc {
         }
 
         // OBLIGO A MODIFICAR EL TIPO DE CUENTA
-        tipo = leeTipoCuenta();
+        tipo = leeTipoCuenta(cuenta.getTipo());
 
+        if (tipo == cuenta.getTipo()) {
+            return cuenta;
+        }
         return leerCuentaTipo(tipo, numCuenta, cuenta.getFechaApertura());
     }
 
@@ -459,6 +463,18 @@ public class Ilc {
         } while (!esValido);
 
         return leer;
+    }
+
+    private static double leeDecimal(String mensaje) {
+        Scanner scan = new Scanner(System.in);
+        while (true) {
+            System.out.print(mensaje);
+            try {
+                return Double.parseDouble(scan.nextLine().trim());
+            } catch (NumberFormatException ex) {
+                System.err.println("Formato incorrecto. Introduce un número decimal");
+            }
+        }
     }
 
 }

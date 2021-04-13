@@ -32,8 +32,16 @@ public class Corriente extends Cuenta {
     }
 
     @Override
+    public int getTipo() {
+        return 1;
+    }
+
+    @Override
     public String toString() {
-        return String.format("; Número tarjeta: %s; Fecha caducidad: %s", numeroTarjeta, fechaCaducidad);
+        StringBuilder toret = new StringBuilder(super.toString());
+        toret.append("; Número de tarjeta: ").append(getNumeroTarjeta())
+                .append("; Fecha de caducidad: ").append(getFechaCaducidad());
+        return toret.toString();
     }
 
 }

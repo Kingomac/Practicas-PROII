@@ -1,5 +1,7 @@
 package es.uvigo.esei.pro2.core;
 
+import java.util.Calendar;
+
 /**
  *
  * @author Mario
@@ -25,25 +27,16 @@ public class Fecha {
     }
 
     public static boolean correcta(int dia, int mes, int anho) {
-        if (mes == 2) {
-            if (dia != 29 && anho % 4 == 0 && anho % 100 != 0 && anho % 400 == 0) {
-                return false;
-            }
-            if (dia != 28) {
-                return false;
-            }
-            return true;
-        }
-        if (dia > 31 || mes > 12 || anho < 1900 || dia < 1 || mes < 1) {
-            return false;
-        }
-        if (mes % 2 != 0 && dia > 31) {
-            return false;
-        }
-        if (mes % 2 == 0 && dia > 30) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setLenient(false);
+        calendar.set(anho, mes - 1, dia);
+        try {
+            calendar.getTime();
+        } catch (Exception ex) {
             return false;
         }
         return true;
+
     }
 
     private int dia;

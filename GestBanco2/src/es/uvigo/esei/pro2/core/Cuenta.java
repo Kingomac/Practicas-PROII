@@ -6,9 +6,7 @@ package es.uvigo.esei.pro2.core;
 
 public abstract class Cuenta {
 
-    private static final Class<Cuenta>[] extensiones = new Class[]{
-        Ahorro.class.getClass(), Corriente.class.getClass()};
-
+    private static final String[] tipos = new String[]{"Ahorro", "Corriente"};
     private String numCuenta;   // Numero de cuenta
     private Fecha fechaApertura;   // Año de apertura de la cuenta
 
@@ -62,9 +60,11 @@ public abstract class Cuenta {
         this.fechaApertura = fecha;
     }
 
-    public static Class<Cuenta>[] getExtensiones() {
-        return extensiones;
+    public static String[] getTipos() {
+        return tipos;
     }
+
+    public abstract int getTipo();
 
     /**
      * Devuelve los datos de una cuenta

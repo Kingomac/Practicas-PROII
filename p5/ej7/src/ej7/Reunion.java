@@ -30,4 +30,11 @@ public class Reunion {
         this.hora = hora;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder toret = new StringBuilder();
+        toret.append("Reunión:\n\tFecha: ").append(getFecha()).append("\n\tHora: ")
+                .append(getHora());
+        return toret.toString();
+    }
 }

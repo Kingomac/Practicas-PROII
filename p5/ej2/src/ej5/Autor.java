@@ -17,13 +17,13 @@ public class Autor {
     private String nombre;
     private final String orcid;
     private double indiceH;
-    private Fecha ingreso;
+    private Fecha fechaIngreso;
 
-    public Autor(String apellidos, String nombre, String orcid, Fecha ingreso) {
+    public Autor(String apellidos, String nombre, String orcid, Fecha fechaIngreso) {
         this.apellidos = apellidos;
         this.nombre = nombre;
         this.orcid = orcid;
-        this.ingreso = ingreso;
+        this.fechaIngreso = fechaIngreso;
     }
 
     public String getApellidos() {
@@ -54,17 +54,21 @@ public class Autor {
         this.indiceH = indiceH;
     }
 
-    public Fecha getIngreso() {
-        return ingreso;
+    public Fecha getFechaIngreso() {
+        return fechaIngreso;
     }
 
-    public void setIngreso(Fecha ingreso) {
-        this.ingreso = ingreso;
+    public void setFechaIngreso(Fecha fechaIngreso) {
+        this.fechaIngreso = fechaIngreso;
     }
 
     @Override
     public String toString() {
-        return String.format("%s: %s, %s", orcid, apellidos, nombre);
+        StringBuilder toret = new StringBuilder();
+        toret.append("Orcid:").append(getOrcid()).append("\bApellidos: ").append(getApellidos())
+                .append("\nNombre: ").append(getNombre()).append("\nFecha de ingreso")
+                .append(getFechaIngreso());
+        return toret.toString();
     }
 
 }

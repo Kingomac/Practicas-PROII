@@ -88,33 +88,12 @@ public class Banco {
     }
 
     /**
-     * Devuelve los datos del Banco
-     *
-     * @return los datos del banco, como cadena
-     */
-    public String toString() {
-        StringBuilder toret = new StringBuilder();
-        final int numClientes = getNumClientes();
-
-        if (numClientes > 0) {
-            for (int i = 0; i < numClientes; i++) {
-                toret.append((i + 1) + ". ");
-                toret.append(clientes[i].toString() + "\n");
-            }
-        } else {
-            toret.append("No hay clientes.");
-        }
-
-        return toret.toString();
-    }
-
-    /**
      * Devuelve los datos de las cuentas del tipo especificado
      *
      * @param tipo
      * @return los datos del banco, como cadena
      */
-    public String listarCuentas(Class<Cuenta> tipo) throws Exception {
+    public String listarCuentas(int tipo) throws Exception {
         StringBuilder toret = new StringBuilder();
         StringBuilder cliente;
         final int numClientes = getNumClientes();
@@ -123,7 +102,7 @@ public class Banco {
             for (int i = 0; i < numClientes; i++) {
                 cliente = new StringBuilder();
                 for (int j = 0; j < clientes[i].getNumCuentas(); j++) {
-                    if (clientes[i].getCuenta(j).getClass().equals(tipo)) {
+                    if (clientes[i].getCuenta(j).getTipo() == tipo) {
                         cliente.append("\t");
                         cliente.append(clientes[i].getCuenta(j).toString());
                         cliente.append("\n");
@@ -134,7 +113,7 @@ public class Banco {
                     toret.append("El cliente ");
                     toret.append(clientes[i].getNombre());
                     toret.append(" tiene las siguientes cuentas del tipo ");
-                    toret.append(tipo.getName().toLowerCase());
+                    toret.append(Cuenta.getTipos()[tipo]);
                     toret.append("\n");
                     toret.append(cliente);
                 }
@@ -152,4 +131,26 @@ public class Banco {
         this.nombre = nombre;
     }
 
+    /**
+     * Devuelve los datos del Banco
+     *
+     * @return los datos del banco, como cadena
+     */
+    public String toString() {
+        StringBuilder toret = new StringBuilder();
+        final int numClientes = getNumClientes();
+
+        toret.append("Nombre del banco: ").append(getNombre());
+
+        if (numClientes > 0) {
+            for (int i = 0; i < numClientes; i++) {
+                toret.append((i + 1) + ". ");
+                toret.append(clientes[i].toString() + "\n");
+            }
+        } else {
+            toret.append("No hay clientes.");
+        }
+
+        return toret.toString();
+    }
 }
