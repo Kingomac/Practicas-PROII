@@ -32,11 +32,6 @@ public class Corriente extends Cuenta {
     }
 
     @Override
-    public int getTipo() {
-        return 1;
-    }
-
-    @Override
     public String toString() {
         StringBuilder toret = new StringBuilder(super.toString());
         toret.append("; Número de tarjeta: ").append(getNumeroTarjeta())

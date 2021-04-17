@@ -93,7 +93,7 @@ public class Banco {
      * @param tipo
      * @return los datos del banco, como cadena
      */
-    public String listarCuentas(int tipo) throws CuentaIndiceExcepcion {
+    public String listarCuentas(String tipo) throws CuentaIndiceExcepcion {
         StringBuilder toret = new StringBuilder();
         StringBuilder cliente;
         final int numClientes = getNumClientes();
@@ -102,7 +102,7 @@ public class Banco {
             for (int i = 0; i < numClientes; i++) {
                 cliente = new StringBuilder();
                 for (int j = 0; j < clientes[i].getNumCuentas(); j++) {
-                    if (clientes[i].getCuenta(j).getTipo() == tipo) {
+                    if (Cuenta.getTipo(clientes[i].getCuenta(j)).equals(tipo)) {
                         cliente.append("\t");
                         cliente.append(clientes[i].getCuenta(j).toString());
                         cliente.append("\n");
@@ -113,7 +113,7 @@ public class Banco {
                     toret.append("El cliente ");
                     toret.append(clientes[i].getNombre());
                     toret.append(" tiene las siguientes cuentas del tipo ");
-                    toret.append(Cuenta.getTipos()[tipo]);
+                    toret.append(tipo);
                     toret.append("\n");
                     toret.append(cliente);
                 }

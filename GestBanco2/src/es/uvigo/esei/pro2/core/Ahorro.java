@@ -24,11 +24,6 @@ public class Ahorro extends Cuenta {
     }
 
     @Override
-    public int getTipo() {
-        return 0;
-    }
-
-    @Override
     public String toString() {
         DecimalFormat format = new DecimalFormat("0.00");
         StringBuilder toret = new StringBuilder(super.toString());

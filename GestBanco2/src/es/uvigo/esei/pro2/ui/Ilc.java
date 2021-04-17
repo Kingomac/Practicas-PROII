@@ -197,7 +197,7 @@ public class Ilc {
      * @return El objeto Cuenta creado
      */
     private Cuenta leerCuenta() {
-        int tipo;
+        String tipo;
 
         String numCuenta = leeCadena("\tNumero de cuenta: ");
         Fecha apertura = leeFecha("\tFecha de apertura: ");
@@ -207,9 +207,9 @@ public class Ilc {
         return leerCuentaTipo(tipo, numCuenta, apertura);
     }
 
-    private Cuenta leerCuentaTipo(int tipo, String numCuenta, Fecha apertura) {
+    private Cuenta leerCuentaTipo(String tipo, String numCuenta, Fecha apertura) {
         return switch (tipo) {
-            case 0 ->
+            case "Ahorro" ->
                 new Ahorro(leeDecimal("\tInterés (%): "), numCuenta, apertura);
             default ->
                 new Corriente(leeCadena("\tNúmero de tarjeta: "), leeFecha("\tFecha de caducidad: "), numCuenta, apertura);
@@ -231,19 +231,19 @@ public class Ilc {
         }
     }
 
-    private int leeTipoCuenta(int tipoActual) {
+    private String leeTipoCuenta(String tipoActual) {
         int opc;
         do {
             System.out.println("Tipos de cuentas:");
             for (int i = 0; i < Cuenta.getTipos().length; i++) {
-                System.out.format("\t%s%d. %s\n", tipoActual == i ? "*" : "", i + 1, Cuenta.getTipos()[i]);
+                System.out.format("\t%s%d. %s\n", tipoActual.equals(Cuenta.getTipos()[i]) ? "*" : "", i + 1, Cuenta.getTipos()[i]);
             }
             opc = leeEntero("-> ");
         } while (opc < 1 || opc > 2);
-        return opc - 1;
+        return Cuenta.getTipos()[opc - 1];
     }
 
-    private int leeTipoCuenta() {
+    private String leeTipoCuenta() {
         int opc;
         do {
             System.out.println("Tipos de cuentas:");
@@ -252,7 +252,7 @@ public class Ilc {
             }
             opc = leeEntero("-> ");
         } while (opc < 1 || opc > Cuenta.getTipos().length);
-        return opc - 1;
+        return Cuenta.getTipos()[opc - 1];
     }
 
     /**
@@ -335,7 +335,7 @@ public class Ilc {
     private Cuenta modificaCuenta(Cuenta cuenta) {
         String numCuenta;
 
-        int tipo;
+        String tipo;
         String temp;
 
         numCuenta = leeCadena("\tNúmero de cuenta ["
@@ -357,9 +357,9 @@ public class Ilc {
         }
 
         // OBLIGO A MODIFICAR EL TIPO DE CUENTA
-        tipo = leeTipoCuenta(cuenta.getTipo());
+        tipo = leeTipoCuenta(Cuenta.getTipo(cuenta));
 
-        if (tipo == cuenta.getTipo()) {
+        if (Cuenta.getTipo(cuenta).equals(tipo)) {
             return cuenta;
         }
         return leerCuentaTipo(tipo, numCuenta, cuenta.getFechaApertura());
