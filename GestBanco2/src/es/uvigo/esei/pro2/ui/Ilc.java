@@ -3,14 +3,14 @@ package es.uvigo.esei.pro2.ui;
 import es.uvigo.esei.pro2.core.Ahorro;
 import es.uvigo.esei.pro2.core.Banco;
 import es.uvigo.esei.pro2.core.Cliente;
-import es.uvigo.esei.pro2.core.ClienteIndiceExcepcion;
 import es.uvigo.esei.pro2.core.Corriente;
 import es.uvigo.esei.pro2.core.Cuenta;
-import es.uvigo.esei.pro2.core.CuentaIndiceExcepcion;
-import es.uvigo.esei.pro2.core.DemasiadosClientesExcepcion;
 import es.uvigo.esei.pro2.core.Fecha;
-import es.uvigo.esei.pro2.core.FechaFormatoExcepcion;
-import es.uvigo.esei.pro2.core.SinCuentasExcepcion;
+import excepciones.ClienteIndiceExcepcion;
+import excepciones.CuentaIndiceExcepcion;
+import excepciones.DemasiadosClientesExcepcion;
+import excepciones.FechaFormatoExcepcion;
+import excepciones.SinCuentasExcepcion;
 import java.util.Scanner;
 
 /**
@@ -208,12 +208,10 @@ public class Ilc {
     }
 
     private Cuenta leerCuentaTipo(String tipo, String numCuenta, Fecha apertura) {
-        return switch (tipo) {
-            case "Ahorro" ->
-                new Ahorro(leeDecimal("\tInterés (%): "), numCuenta, apertura);
-            default ->
-                new Corriente(leeCadena("\tNúmero de tarjeta: "), leeFecha("\tFecha de caducidad: "), numCuenta, apertura);
-        };
+        if (tipo.equals(Cuenta.getTipos()[0])) {
+            return new Ahorro(leeDecimal("\tInterés (%): "), numCuenta, apertura);
+        }
+        return new Corriente(leeCadena("\tNúmero de tarjeta: "), leeFecha("\tFecha de caducidad: "), numCuenta, apertura);
     }
 
     private static Fecha leeFecha(String mensaje) {
@@ -231,6 +229,12 @@ public class Ilc {
         }
     }
 
+    /**
+     * Devuelve un tipo de cuenta por teclado
+     *
+     * @param tipoActual
+     * @return Tipo de cuenta como String
+     */
     private String leeTipoCuenta(String tipoActual) {
         int opc;
         do {
@@ -239,20 +243,12 @@ public class Ilc {
                 System.out.format("\t%s%d. %s\n", tipoActual.equals(Cuenta.getTipos()[i]) ? "*" : "", i + 1, Cuenta.getTipos()[i]);
             }
             opc = leeEntero("-> ");
-        } while (opc < 1 || opc > 2);
+        } while (opc < 1 || opc > Cuenta.getTipos().length);
         return Cuenta.getTipos()[opc - 1];
     }
 
     private String leeTipoCuenta() {
-        int opc;
-        do {
-            System.out.println("Tipos de cuentas:");
-            for (int i = 0; i < Cuenta.getTipos().length; i++) {
-                System.out.format("\t%d. %s\n", i + 1, Cuenta.getTipos()[i]);
-            }
-            opc = leeEntero("-> ");
-        } while (opc < 1 || opc > Cuenta.getTipos().length);
-        return Cuenta.getTipos()[opc - 1];
+        return leeTipoCuenta("");
     }
 
     /**

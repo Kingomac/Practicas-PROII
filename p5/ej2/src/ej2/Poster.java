@@ -1,7 +1,7 @@
 package ej2;
 
 import ej5.Autor;
-import ej6.ExcedeDuracionException;
+import ej6.InsuficienteDuracionException;
 import java.time.Duration;
 import java.time.LocalTime;
 
@@ -124,9 +124,9 @@ public class Poster extends Comunicacion {
         return duracion;
     }
 
-    public void setDuracion(Duration duracion) throws ExcedeDuracionException {
+    public void setDuracion(Duration duracion) throws InsuficienteDuracionException {
         if (duracion.getSeconds() < MIN_HORAS * 3600) {
-            throw new ExcedeDuracionException("Duración de la sesión sobrepasada en " + (MIN_HORAS * 3600 - duracion.getSeconds()) + " segundos");
+            throw new InsuficienteDuracionException("Duración de la sesión sobrepasada en " + (MIN_HORAS * 3600 - duracion.getSeconds()) + " segundos");
         }
         this.duracion = duracion;
     }

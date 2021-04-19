@@ -3,6 +3,9 @@
  */
 package es.uvigo.esei.pro2.core;
 
+import excepciones.CuentaIndiceExcepcion;
+import excepciones.SinCuentasExcepcion;
+
 public class Cliente {
 
     private String dni;             // D.N.I. del cliente

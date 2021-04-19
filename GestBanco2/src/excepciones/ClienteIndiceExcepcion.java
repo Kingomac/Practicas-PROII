@@ -1,10 +1,10 @@
-package es.uvigo.esei.pro2.core;
+package excepciones;
 
 /**
  *
  * @author Mario
  */
-public class ClienteIndiceExcepcion extends ClienteExcepcion {
+public class ClienteIndiceExcepcion extends BancoException {
 
     /**
      * Creates a new instance of <code>ClienteNoExisteExcepcion</code> without

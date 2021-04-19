@@ -4,6 +4,10 @@
  */
 package es.uvigo.esei.pro2.core;
 
+import excepciones.DemasiadosClientesExcepcion;
+import excepciones.ClienteIndiceExcepcion;
+import excepciones.CuentaIndiceExcepcion;
+
 public class Banco {
 
     private String nombre;

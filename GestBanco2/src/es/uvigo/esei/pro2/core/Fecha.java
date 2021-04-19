@@ -1,5 +1,6 @@
 package es.uvigo.esei.pro2.core;
 
+import excepciones.FechaFormatoExcepcion;
 import java.util.Calendar;
 
 /**
@@ -8,6 +9,16 @@ import java.util.Calendar;
  */
 public class Fecha {
 
+    /**
+     * Convierte un String que contenga una fecha en formato dd/mm/yyy en una
+     * Fecha
+     *
+     * @param fecha String a convertir
+     * @return Fecha
+     * @throws FechaFormatoExcepcion La fecha no es correcta
+     * @throws NumberFormatException No se pueden convertir los números a
+     * enteros
+     */
     public static Fecha parseFecha(String fecha) throws FechaFormatoExcepcion, NumberFormatException {
         int dia;
         int mes;
@@ -26,6 +37,14 @@ public class Fecha {
         return new Fecha(dia, mes, anho);
     }
 
+    /**
+     * Comprueba si una fecha es correcta
+     *
+     * @param dia
+     * @param mes
+     * @param anho
+     * @return true: la fecha es correcta; false: la fecha es incorrecta
+     */
     public static boolean correcta(int dia, int mes, int anho) {
         Calendar calendar = Calendar.getInstance();
         calendar.setLenient(false);
@@ -43,6 +62,13 @@ public class Fecha {
     private int mes;
     private int anho;
 
+    /**
+     * Crea una fecha
+     *
+     * @param dia
+     * @param mes
+     * @param anho
+     */
     public Fecha(int dia, int mes, int anho) {
         this.dia = dia;
         this.mes = mes;
@@ -91,6 +117,11 @@ public class Fecha {
         this.anho = anho;
     }
 
+    /**
+     * Devuelve la fecha en formato dd/mm/yyy
+     *
+     * @return
+     */
     @Override
     public String toString() {
         return String.format("%d/%d/%d", getDia(), getMes(), getAnho());
