@@ -197,7 +197,7 @@ public class Ilc {
      * @return El objeto Cuenta creado
      */
     private Cuenta leerCuenta() {
-        String tipo;
+        Cuenta.Tipo tipo;
 
         String numCuenta = leeCadena("\tNumero de cuenta: ");
         Fecha apertura = leeFecha("\tFecha de apertura: ");
@@ -207,8 +207,8 @@ public class Ilc {
         return leerCuentaTipo(tipo, numCuenta, apertura);
     }
 
-    private Cuenta leerCuentaTipo(String tipo, String numCuenta, Fecha apertura) {
-        if (tipo.equals(Cuenta.getTipos()[0])) {
+    private Cuenta leerCuentaTipo(Cuenta.Tipo tipo, String numCuenta, Fecha apertura) {
+        if (tipo.equals(Cuenta.Tipo.AHORRO)) {
             return new Ahorro(leeDecimal("\tInterés (%): "), numCuenta, apertura);
         }
         return new Corriente(leeCadena("\tNúmero de tarjeta: "), leeFecha("\tFecha de caducidad: "), numCuenta, apertura);
@@ -235,20 +235,28 @@ public class Ilc {
      * @param tipoActual
      * @return Tipo de cuenta como String
      */
-    private String leeTipoCuenta(String tipoActual) {
+    private Cuenta.Tipo leeTipoCuenta(Cuenta.Tipo tipoActual) {
         int opc;
         do {
             System.out.println("Tipos de cuentas:");
-            for (int i = 0; i < Cuenta.getTipos().length; i++) {
-                System.out.format("\t%s%d. %s\n", tipoActual.equals(Cuenta.getTipos()[i]) ? "*" : "", i + 1, Cuenta.getTipos()[i]);
+            for (int i = 0; i < Cuenta.Tipo.values().length; i++) {
+                System.out.format("\t%s%d. %s\n", tipoActual.equals(Cuenta.Tipo.values()[i]) ? "*" : "", i + 1, Cuenta.Tipo.values()[i].name());
             }
             opc = leeEntero("-> ");
-        } while (opc < 1 || opc > Cuenta.getTipos().length);
-        return Cuenta.getTipos()[opc - 1];
+        } while (opc < 1 || opc > Cuenta.Tipo.values().length);
+        return Cuenta.Tipo.values()[opc - 1];
     }
 
-    private String leeTipoCuenta() {
-        return leeTipoCuenta("");
+    private Cuenta.Tipo leeTipoCuenta() {
+        int opc;
+        do {
+            System.out.println("Tipos de cuentas:");
+            for (int i = 0; i < Cuenta.Tipo.values().length; i++) {
+                System.out.format("\t%d. %s\n", i + 1, Cuenta.Tipo.values()[i].name());
+            }
+            opc = leeEntero("-> ");
+        } while (opc < 1 || opc > Cuenta.Tipo.values().length);
+        return Cuenta.Tipo.values()[opc - 1];
     }
 
     /**
@@ -331,7 +339,7 @@ public class Ilc {
     private Cuenta modificaCuenta(Cuenta cuenta) {
         String numCuenta;
 
-        String tipo;
+        Cuenta.Tipo tipo;
         String temp;
 
         numCuenta = leeCadena("\tNúmero de cuenta ["
@@ -403,7 +411,9 @@ public class Ilc {
     /**
      * Lista las cuentas del banco por tipo
      *
-     * @param coleccion El Banco del que se listan las cuentas.
+     * @param coleccion El Banco del que se listan las cuentas
+     * @return String con las cuentas
+     * @throws CuentaIndiceExcepcion
      */
     public String listarPorTipoCuenta(Banco coleccion) throws CuentaIndiceExcepcion {
         return coleccion.listarCuentas(leeTipoCuenta());

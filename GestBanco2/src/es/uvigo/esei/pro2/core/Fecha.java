@@ -75,10 +75,21 @@ public class Fecha {
         this.anho = anho;
     }
 
+    /**
+     * Devuelve el día de la fecha
+     *
+     * @return int día
+     */
     public int getDia() {
         return dia;
     }
 
+    /**
+     * Cambia el día de la fecha comprobando si es correcta
+     *
+     * @param dia int nuevo valor del día
+     * @throws FechaFormatoExcepcion se produce si la fecha nueva no es correcta
+     */
     public void setDia(int dia) throws FechaFormatoExcepcion {
         if (!correcta(dia, getMes(), getAnho())) {
             throw new FechaFormatoExcepcion();
@@ -86,10 +97,21 @@ public class Fecha {
         this.dia = dia;
     }
 
+    /**
+     * Devuelve el mes de la fecha
+     *
+     * @return int mes
+     */
     public int getMes() {
         return mes;
     }
 
+    /**
+     * Cambia el mes de la fecha comprobando si es correcta
+     *
+     * @param mes int nuevo valor del mes
+     * @throws FechaFormatoExcepcion se produce si la fecha nueva no es correcta
+     */
     public void setMes(int mes) throws FechaFormatoExcepcion {
         if (!correcta(getDia(), mes, getAnho())) {
             throw new FechaFormatoExcepcion();
@@ -97,10 +119,21 @@ public class Fecha {
         this.mes = mes;
     }
 
+    /**
+     * Devuelve el año de la fecha
+     *
+     * @return int año
+     */
     public int getAnho() {
         return anho;
     }
 
+    /**
+     * Cambia el año de la fecha comprobando si es correcta
+     *
+     * @param anho int nuevo valor del año
+     * @throws FechaFormatoExcepcion se produce si la fecha nueva no es correcta
+     */
     public void setAnho(int anho) throws FechaFormatoExcepcion {
         if (!correcta(getDia(), getMes(), anho)) {
             throw new FechaFormatoExcepcion();
@@ -108,6 +141,14 @@ public class Fecha {
         this.anho = anho;
     }
 
+    /**
+     * Cambia todos los valores de la fecha
+     *
+     * @param dia int nuevo día
+     * @param mes int nuevo mes
+     * @param anho int nuevo año
+     * @throws FechaFormatoExcepcion se produce si la fecha nueva no es correcta
+     */
     public void set(int dia, int mes, int anho) throws FechaFormatoExcepcion {
         if (!correcta(dia, mes, anho)) {
             throw new FechaFormatoExcepcion();
@@ -120,7 +161,7 @@ public class Fecha {
     /**
      * Devuelve la fecha en formato dd/mm/yyy
      *
-     * @return
+     * @return Fecha como String dd/mm/yyy
      */
     @Override
     public String toString() {

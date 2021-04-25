@@ -6,17 +6,15 @@ package es.uvigo.esei.pro2.core;
 
 public abstract class Cuenta {
 
-    private static final String[] tipos = new String[]{"Ahorro", "Corriente"};
-
-    public static String[] getTipos() {
-        return tipos;
+    public static enum Tipo {
+        AHORRO, CORRIENTE
     }
 
-    public static String getTipo(Cuenta cuenta) {
-        if (cuenta instanceof Ahorro) {
-            return tipos[0];
+    public static Tipo getTipo(Cuenta c) {
+        if (c instanceof Ahorro) {
+            return Tipo.AHORRO;
         }
-        return tipos[1];
+        return Tipo.CORRIENTE;
     }
 
     private String numCuenta;   // Numero de cuenta
@@ -70,6 +68,10 @@ public abstract class Cuenta {
      */
     public void setFechaApertura(Fecha fecha) {
         this.fechaApertura = fecha;
+    }
+
+    public Tipo getTipo() {
+        return Cuenta.getTipo(this);
     }
 
     /**

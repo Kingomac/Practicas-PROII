@@ -4,9 +4,9 @@
  */
 package es.uvigo.esei.pro2.core;
 
-import excepciones.DemasiadosClientesExcepcion;
 import excepciones.ClienteIndiceExcepcion;
 import excepciones.CuentaIndiceExcepcion;
+import excepciones.DemasiadosClientesExcepcion;
 
 public class Banco {
 
@@ -66,6 +66,8 @@ public class Banco {
      * Inserta un nuevo cliente
      *
      * @param c el nuevo objeto Cliente
+     * @throws DemasiadosClientesExcepcion se produce cuando se alcanza la
+     * capacidad máxima de clientes en el banco
      */
     public void inserta(Cliente c) throws DemasiadosClientesExcepcion {
         final int maxClientes = getMaxClientes();
@@ -84,20 +86,21 @@ public class Banco {
      * @param pos el lugar del cliente en el vector de clientes
      */
     public void elimina(int pos) {
-//        clientes[pos] = clientes[--numClientes];
-        for (int i = pos; i < (getNumClientes() - 1); i++) {
-            clientes[i] = clientes[i + 1];
-        }
-        --numClientes;
+        clientes[pos] = clientes[--numClientes];
+//        for (int i = pos; i < (getNumClientes() - 1); i++) {
+//            clientes[i] = clientes[i + 1];
+//        }
+//        --numClientes;
     }
 
     /**
      * Devuelve los datos de las cuentas del tipo especificado
      *
-     * @param tipo
+     * @param tipo tipo de cuenta a buscar
      * @return los datos del banco, como cadena
+     * @throws CuentaIndiceExcepcion
      */
-    public String listarCuentas(String tipo) throws CuentaIndiceExcepcion {
+    public String listarCuentas(Cuenta.Tipo tipo) throws CuentaIndiceExcepcion {
         StringBuilder toret = new StringBuilder();
         StringBuilder cliente;
         final int numClientes = getNumClientes();
@@ -106,7 +109,7 @@ public class Banco {
             for (int i = 0; i < numClientes; i++) {
                 cliente = new StringBuilder();
                 for (int j = 0; j < clientes[i].getNumCuentas(); j++) {
-                    if (Cuenta.getTipo(clientes[i].getCuenta(j)).equals(tipo)) {
+                    if (clientes[i].getCuenta(j).getTipo().equals(tipo)) {
                         cliente.append("\t");
                         cliente.append(clientes[i].getCuenta(j).toString());
                         cliente.append("\n");
@@ -117,7 +120,7 @@ public class Banco {
                     toret.append("El cliente ");
                     toret.append(clientes[i].getNombre());
                     toret.append(" tiene las siguientes cuentas del tipo ");
-                    toret.append(tipo);
+                    toret.append(tipo.name().toLowerCase());
                     toret.append("\n");
                     toret.append(cliente);
                 }
@@ -127,10 +130,20 @@ public class Banco {
 
     }
 
+    /**
+     * Devuelve el nombre del banco
+     *
+     * @return String del nombre del banco
+     */
     public String getNombre() {
         return nombre;
     }
 
+    /**
+     * Cambia el nombre del banco
+     *
+     * @param nombre String del nuevo nombre
+     */
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
@@ -140,6 +153,7 @@ public class Banco {
      *
      * @return los datos del banco, como cadena
      */
+    @Override
     public String toString() {
         StringBuilder toret = new StringBuilder();
         final int numClientes = getNumClientes();
@@ -148,8 +162,8 @@ public class Banco {
 
         if (numClientes > 0) {
             for (int i = 0; i < numClientes; i++) {
-                toret.append((i + 1) + ". ");
-                toret.append(clientes[i].toString() + "\n");
+                toret.append(i + 1).append(". ");
+                toret.append(clientes[i].toString()).append("\n");
             }
         } else {
             toret.append("No hay clientes.");
