@@ -1,6 +1,6 @@
 /*
  * Proyecto de Programación II.
- * Gestión de un banco (entidad bancaria). 
+ * Gestión de un banco (entidad bancaria).
  */
 package es.uvigo.esei.pro2.ui;
 

@@ -6,10 +6,12 @@ import es.uvigo.esei.pro2.core.Cliente;
 import es.uvigo.esei.pro2.core.Corriente;
 import es.uvigo.esei.pro2.core.Cuenta;
 import es.uvigo.esei.pro2.core.Fecha;
+import es.uvigo.esei.pro2.core.Senior;
 import excepciones.ClienteIndiceExcepcion;
 import excepciones.CuentaIndiceExcepcion;
 import excepciones.DemasiadosClientesExcepcion;
 import excepciones.FechaFormatoExcepcion;
+import excepciones.SeniorEdadException;
 import excepciones.SinCuentasExcepcion;
 import java.util.Scanner;
 
@@ -17,6 +19,8 @@ import java.util.Scanner;
  * Interfaz de lin. de comando
  */
 public class Ilc {
+
+    private final int ANHO_ACTUAL = 2021;
 
     /**
      * Realiza el reparto de la funcionalidad ler = lee, evalua, repite
@@ -70,6 +74,8 @@ public class Ilc {
                 System.err.println("No existe la cuenta con ese índice: " + ex.getMessage());
             } catch (ClienteIndiceExcepcion ex) {
                 System.err.println("No existe un cliente con ese índice: " + ex.getMessage());
+            } catch (SeniorEdadException ex) {
+                System.err.println("Las personas menores de " + Senior.MIN_EDAD + " años no pueden crear cuentas Senior");
             }
 
         } while (op != 0);
@@ -108,7 +114,7 @@ public class Ilc {
      *
      * @param coleccion La coleccion en la que se inserta el cliente.
      */
-    private void insertaCliente(Banco coleccion) throws DemasiadosClientesExcepcion {
+    private void insertaCliente(Banco coleccion) throws DemasiadosClientesExcepcion, SeniorEdadException {
         System.out.println("\n------------");
         System.out.println("\nAlta cliente");
 
@@ -137,7 +143,7 @@ public class Ilc {
      *
      * @param coleccion La coleccion de la cual modificar un cliente.
      */
-    private void modificaCliente(Banco coleccion) throws ClienteIndiceExcepcion, CuentaIndiceExcepcion, SinCuentasExcepcion {
+    private void modificaCliente(Banco coleccion) throws ClienteIndiceExcepcion, CuentaIndiceExcepcion, SinCuentasExcepcion, SeniorEdadException {
         System.out.println("\n--------------------");
         System.out.println("\nModificación cliente");
 
@@ -153,12 +159,13 @@ public class Ilc {
      *
      * @return El objeto Cliente creado
      */
-    private Cliente leeCliente() {
+    private Cliente leeCliente() throws SeniorEdadException {
         System.out.println("\nIntroduce los datos del nuevo cliente:");
 
         String nombre = leeCadena("\tNombre: ");
         String dni = leeCadena("\tD.N.I.: ");
         String domicilio = leeCadena("\tDomicilio: ");
+        Fecha fechaNacimiento = leeFecha("\tFecha de nacimiento ");
 
         int numCuentas = 0;
         do {
@@ -169,9 +176,9 @@ public class Ilc {
             }
         } while (numCuentas < 1);
 
-        Cuenta[] cuentas = leerCuentas(numCuentas);
+        Cuenta[] cuentas = leerCuentas(numCuentas, fechaNacimiento);
 
-        return new Cliente(dni, nombre, domicilio, cuentas);
+        return new Cliente(dni, nombre, domicilio, fechaNacimiento, cuentas);
     }
 
     /**
@@ -180,12 +187,12 @@ public class Ilc {
      * @param numCuentas numero de cuentas a leer
      * @return Array con las cuentas bancarias creadas
      */
-    private Cuenta[] leerCuentas(int numCuentas) {
+    private Cuenta[] leerCuentas(int numCuentas, Fecha fechaNacimiento) throws SeniorEdadException {
         Cuenta[] cuentas = new Cuenta[numCuentas];
 
         for (int i = 0; i < numCuentas; i++) {
             System.out.println("\n\tDatos de la cuenta número " + (i + 1));
-            cuentas[i] = leerCuenta();
+            cuentas[i] = leerCuenta(fechaNacimiento);
         }
 
         return cuentas;
@@ -196,7 +203,7 @@ public class Ilc {
      *
      * @return El objeto Cuenta creado
      */
-    private Cuenta leerCuenta() {
+    private Cuenta leerCuenta(Fecha fechaNacimiento) throws SeniorEdadException {
         Cuenta.Tipo tipo;
 
         String numCuenta = leeCadena("\tNumero de cuenta: ");
@@ -204,21 +211,59 @@ public class Ilc {
 
         tipo = leeTipoCuenta();
 
-        return leerCuentaTipo(tipo, numCuenta, apertura);
+        return leerCuentaTipo(tipo, numCuenta, apertura, fechaNacimiento);
     }
 
-    private Cuenta leerCuentaTipo(Cuenta.Tipo tipo, String numCuenta, Fecha apertura) {
+    private Cuenta leerCuentaTipo(Cuenta.Tipo tipo, String numCuenta, Fecha apertura, Fecha fechaNacimiento) throws SeniorEdadException {
         if (tipo.equals(Cuenta.Tipo.AHORRO)) {
             return new Ahorro(leeDecimal("\tInterés (%): "), numCuenta, apertura);
+        } else if (tipo.equals(Cuenta.Tipo.CORRIENTE)) {
+            return new Corriente(leeCadena("\tNúmero de tarjeta: "), leeFecha("\tFecha de caducidad: "), numCuenta, apertura);
         }
-        return new Corriente(leeCadena("\tNúmero de tarjeta: "), leeFecha("\tFecha de caducidad: "), numCuenta, apertura);
+        if (ANHO_ACTUAL - fechaNacimiento.getAnho() < Senior.MIN_EDAD) {
+            throw new SeniorEdadException();
+        }
+        return new Senior(numCuenta, apertura);
+    }
+
+    private Cuenta modificarCuentaTipo(Cuenta anterior, Cuenta.Tipo nuevoTipo, Fecha fechaNacimiento) throws SeniorEdadException, FechaFormatoExcepcion, NumberFormatException {
+        String temp;
+        if (anterior.getTipo().equals(nuevoTipo)) {
+            if (nuevoTipo.equals(Cuenta.Tipo.AHORRO)) {
+                Ahorro c = (Ahorro) anterior;
+                temp = leeCadena("\tInterés (%) [" + c.getInteres() + "%]: ");
+                if (!temp.isEmpty()) {
+                    c.setInteres(Double.parseDouble(temp));
+                }
+                return c;
+            } else if (nuevoTipo.equals(Cuenta.Tipo.CORRIENTE)) {
+                Corriente c = (Corriente) anterior;
+                temp = leeCadena("\tNúmero tarjeta [" + c.getNumeroTarjeta() + "]: ");
+                if (!temp.isEmpty()) {
+                    c.setNumeroTarjeta(temp);
+                }
+                temp = leeCadena("\tFecha de caducidad [" + c.getFechaCaducidad() + "]: ");
+                if (!temp.isEmpty()) {
+                    c.setFechaCaducidad(Fecha.parseFecha(temp));
+                }
+                return c;
+            }
+            do {
+                temp = leeCadena("\tRenovar cuenta? (S/N): ");
+            } while (!temp.equals("S") && !temp.equals("N"));
+            if (temp.equals("S")) {
+                return new Senior(anterior.getNumCuenta(), anterior.getFechaApertura());
+            }
+            return anterior;
+        }
+        return leerCuentaTipo(nuevoTipo, anterior.getNumCuenta(), anterior.getFechaApertura(), fechaNacimiento);
     }
 
     private static Fecha leeFecha(String mensaje) {
         String temp;
         while (true) {
-            System.out.println(mensaje);
-            temp = leeCadena("(dd/mm/yyy): ");
+            System.out.print(mensaje);
+            temp = leeCadena(" (dd/mm/yyy): ");
             try {
                 return Fecha.parseFecha(temp);
             } catch (FechaFormatoExcepcion ex) {
@@ -264,7 +309,7 @@ public class Ilc {
      *
      * @param c Objeto Cliente a modificar
      */
-    private void modificaCliente(Cliente c) throws CuentaIndiceExcepcion, SinCuentasExcepcion {
+    private void modificaCliente(Cliente c) throws CuentaIndiceExcepcion, SinCuentasExcepcion, SeniorEdadException {
         int op;
 
         System.out.println("\nModificando los datos del siguiente cliente:");
@@ -297,11 +342,11 @@ public class Ilc {
                     System.out.println("Fin.");
                     break;
                 case 1:
-                    c.nuevaCuenta(leerCuenta());
+                    c.nuevaCuenta(leerCuenta(c.getFechaNacimiento()));
                     break;
                 case 2:
                     int pos = leePosCuenta(c.getNumCuentas());
-                    c.nuevaCuenta(modificaCuenta(c.getCuenta(pos)));
+                    c.nuevaCuenta(modificaCuenta(c.getCuenta(pos), c.getFechaNacimiento()));
                     c.eliminaCuenta(pos);
                     break;
                 case 3:
@@ -336,7 +381,7 @@ public class Ilc {
      *
      * @param cuenta Objeto Cuenta a modificar
      */
-    private Cuenta modificaCuenta(Cuenta cuenta) {
+    private Cuenta modificaCuenta(Cuenta cuenta, Fecha fechaNacimiento) throws SeniorEdadException {
         String numCuenta;
 
         Cuenta.Tipo tipo;
@@ -362,11 +407,12 @@ public class Ilc {
 
         // OBLIGO A MODIFICAR EL TIPO DE CUENTA
         tipo = leeTipoCuenta(Cuenta.getTipo(cuenta));
-
-        if (Cuenta.getTipo(cuenta).equals(tipo)) {
+        try {
+            return modificarCuentaTipo(cuenta, tipo, fechaNacimiento);
+        } catch (FechaFormatoExcepcion | NumberFormatException ex) {
+            System.err.println("Los datos introducidos no son correctos y por tanto no se ha modificado la cuenta");
             return cuenta;
         }
-        return leerCuentaTipo(tipo, numCuenta, cuenta.getFechaApertura());
     }
 
     /**

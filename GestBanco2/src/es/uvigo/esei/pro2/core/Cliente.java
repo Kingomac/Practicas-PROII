@@ -11,6 +11,7 @@ public class Cliente {
     private String dni;             // D.N.I. del cliente
     private String nombre;          // Nombre del cliente
     private String domicilio;       // Domicilio del cliente
+    private Fecha fechaNacimiento;  // Fecha de nacimiento del cliente
     private Cuenta[] cuentas;     // Cuentas bancarias del cliente
 
     /**
@@ -22,11 +23,12 @@ public class Cliente {
      * @param domicilio el domicilio del cliente
      * @param cuentas array con las cuentas que tiene el cliente
      */
-    public Cliente(String dni, String nombre, String domicilio,
+    public Cliente(String dni, String nombre, String domicilio, Fecha fechaNacimiento,
             Cuenta[] cuentas) {
         this.dni = dni;
         this.nombre = nombre;
         this.domicilio = domicilio;
+        this.fechaNacimiento = fechaNacimiento;
         this.cuentas = cuentas;
     }
 
@@ -75,6 +77,10 @@ public class Cliente {
      */
     public String getDomicilio() {
         return domicilio;
+    }
+
+    public Fecha getFechaNacimiento() {
+        return fechaNacimiento;
     }
 
     /**
@@ -161,13 +167,15 @@ public class Cliente {
 
         toret.append("Cliente ").append(getNombre());
         toret.append(" con DNI ").append(getDni());
+        toret.append(", fecha de nacimiento ").append(getFechaNacimiento());
         toret.append(" y domicilio en ").append(getDomicilio());
-        toret.append(". \n\n \tDatos de sus cuentas:  ");
+        toret.append(". \n \tDatos de sus cuentas:  ");
 
         for (Cuenta cuenta : this.cuentas) {
             toret.append("\n\t\t").append(cuenta.toString());
         }
 
+        toret.append("\n");
         return toret.toString();
     }
 

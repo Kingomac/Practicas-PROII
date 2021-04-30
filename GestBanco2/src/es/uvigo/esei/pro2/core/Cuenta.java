@@ -7,14 +7,16 @@ package es.uvigo.esei.pro2.core;
 public abstract class Cuenta {
 
     public static enum Tipo {
-        AHORRO, CORRIENTE
+        AHORRO, CORRIENTE, SENIOR
     }
 
     public static Tipo getTipo(Cuenta c) {
         if (c instanceof Ahorro) {
             return Tipo.AHORRO;
+        } else if (c instanceof Corriente) {
+            return Tipo.CORRIENTE;
         }
-        return Tipo.CORRIENTE;
+        return Tipo.SENIOR;
     }
 
     private String numCuenta;   // Numero de cuenta
