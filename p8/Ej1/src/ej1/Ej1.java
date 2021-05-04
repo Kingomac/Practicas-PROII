@@ -16,18 +16,28 @@ public class Ej1 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Element mensajes = new Element("mensajes");
+        // Crear los elementos
+        Element raiz = new Element("mensajes");
         Element mensaje = new Element("mensaje");
+
+// Crear el documento
         mensaje.appendChild("Hola, mundo");
-        mensajes.appendChild(mensaje);
+        raiz.appendChild(mensaje);
+        Document doc = new Document(raiz);
 
-        Document doc = new Document(mensajes);
+// Guardarlo
+        try {
 
-        try ( FileOutputStream f = new FileOutputStream("mensajes.xml")) {
-            Serializer serializer = new Serializer(f);
-            serializer.write(doc);
-        } catch (IOException ex) {
-            System.err.println("ERROR escribiendo XML: " + ex.getMessage());
+            FileOutputStream f = new FileOutputStream("mensaje.xml");
+            Serializer serial = new Serializer(f);
+            serial.setIndent(4);
+            serial.write(doc);
+            f.close();
+            System.out.println("Ok");
+        } catch (IOException exc) {
+
+            System.err.println("ERROR de archivo: " + exc.getMessage());
+
         }
     }
 

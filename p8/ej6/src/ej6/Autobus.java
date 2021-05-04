@@ -24,8 +24,8 @@ public class Autobus extends Vehiculo {
         numPlazas = Integer.parseInt(elNumPlazas.getValue());
     }
 
-    public Autobus(int numPlazas, String matricula, String marca, String modelo) {
-        super(matricula, marca, modelo);
+    public Autobus(int numPlazas, String matricula, String marca, String modelo, Fecha fechaMatriculacion) {
+        super(matricula, marca, modelo, fechaMatriculacion);
         this.numPlazas = numPlazas;
     }
 

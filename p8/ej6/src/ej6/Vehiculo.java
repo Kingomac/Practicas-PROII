@@ -20,11 +20,13 @@ public abstract class Vehiculo {
     private String matricula;
     private String marca;
     private String modelo;
+    private Fecha fechaMatriculacion;
 
     public Vehiculo(Element el) throws ParsingException {
         Element elMatricula = el.getFirstChildElement(Etq.MATRICULA.name());
         Element elMarca = el.getFirstChildElement(Etq.MARCA.name());
         Element elModelo = el.getFirstChildElement(Etq.MODELO.name());
+        Element elFechaMatriculacion = el.getFirstChildElement(Fecha.Etq.FECHA.name());
 
         if (elMatricula == null) {
             throw new ParsingException("Falta la matrícula");
@@ -35,16 +37,21 @@ public abstract class Vehiculo {
         if (elModelo == null) {
             throw new ParsingException("Falta el modelo");
         }
+        if (elFechaMatriculacion == null) {
+            throw new ParsingException("Falta la fecha de matriculación");
+        }
 
         matricula = elMatricula.getValue();
         marca = elMarca.getValue();
         modelo = elModelo.getValue();
+        fechaMatriculacion = new Fecha(elFechaMatriculacion);
     }
 
-    public Vehiculo(String matricula, String marca, String modelo) {
+    public Vehiculo(String matricula, String marca, String modelo, Fecha fechaMatriculacion) {
         this.matricula = matricula;
         this.marca = marca;
         this.modelo = modelo;
+        this.fechaMatriculacion = fechaMatriculacion;
     }
 
     public String getMatricula() {
@@ -78,6 +85,10 @@ public abstract class Vehiculo {
         return Tipo.AUTOBUS;
     }
 
+    public Fecha getFechaMatriculacion() {
+        return fechaMatriculacion;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -99,6 +110,7 @@ public abstract class Vehiculo {
         vehiculo.appendChild(elMatricula);
         vehiculo.appendChild(elMarca);
         vehiculo.appendChild(elModelo);
+        vehiculo.appendChild(fechaMatriculacion.toDom());
 
         return vehiculo;
     }

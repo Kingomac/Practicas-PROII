@@ -24,8 +24,8 @@ public class Taxi extends Vehiculo {
         numLicencia = Integer.parseInt(elNumLicencia.getValue());
     }
 
-    public Taxi(int numLicencia, String matricula, String marca, String modelo) {
-        super(matricula, marca, modelo);
+    public Taxi(int numLicencia, String matricula, String marca, String modelo, Fecha fechaMatriculacion) {
+        super(matricula, marca, modelo, fechaMatriculacion);
         this.numLicencia = numLicencia;
     }
 

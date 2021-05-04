@@ -1,6 +1,7 @@
 package ej6;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -72,7 +73,7 @@ public class GestionTransportes {
         return elVehiculos;
     }
 
-    public void toXML(String nf) throws IOException {
+    public void toXML(String nf) throws IOException, FileNotFoundException {
         FileOutputStream f = new FileOutputStream(nf);
         Document doc = new Document(this.toDom());
         Serializer serial = new Serializer(f);

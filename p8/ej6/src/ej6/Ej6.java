@@ -1,5 +1,6 @@
 package ej6;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
 import nu.xom.ParsingException;
@@ -43,6 +44,8 @@ public class Ej6 {
         try {
             gestion.toXML("transportes.xml");
             System.out.println("Datos guardados");
+        } catch (FileNotFoundException ex) {
+            System.err.println("La ruta del archivo no es correcta");
         } catch (IOException ex) {
             System.err.println("Error guardando el archivo: " + ex.getMessage());
         }
@@ -87,12 +90,14 @@ public class Ej6 {
         String matricula;
         String marca;
         String modelo;
+        Fecha fechaMatriculacion;
         int tipo;
 
         System.out.println("Vehículo: ");
         matricula = leerCadena("\tMatrícula: ");
         marca = leerCadena("\tMarca: ");
         modelo = leerCadena("\tModelo: ");
+        fechaMatriculacion = leerFecha("\tFecha de matriculación: ");
 
         do {
             System.out.println("\tTipo:");
@@ -103,9 +108,25 @@ public class Ej6 {
         } while (tipo < 1 || tipo > Vehiculo.Tipo.values().length);
 
         if (Vehiculo.Tipo.values()[tipo - 1] == Vehiculo.Tipo.TAXI) {
-            return new Taxi(leerEntero("\tNúmero de licencia: "), matricula, marca, modelo);
+            return new Taxi(leerEntero("\tNúmero de licencia: "), matricula, marca, modelo, fechaMatriculacion);
         }
-        return new Autobus(leerEntero("\tNúmero de plazas: "), matricula, marca, modelo);
+        return new Autobus(leerEntero("\tNúmero de plazas: "), matricula, marca, modelo, fechaMatriculacion);
+    }
+
+    private static Fecha leerFecha(String mensaje) {
+        Fecha toret = new Fecha(1, 1, 2021);
+        boolean seguir = true;
+        do {
+            try {
+                toret = Fecha.parseFecha(leerCadena(mensaje + "(dd/mm/aaa): "));
+                seguir = false;
+            } catch (FechaFormatoException ex) {
+                System.err.println("Formato de fecha no válido");
+            } catch (NumberFormatException ex) {
+                System.err.println("La fecha debe tener números enteros");
+            }
+        } while (seguir);
+        return toret;
     }
 
     private static void borrar(GestionTransportes gest) {

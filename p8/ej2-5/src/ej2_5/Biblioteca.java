@@ -1,6 +1,7 @@
 package ej2_5;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,11 +25,12 @@ public class Biblioteca {
     private ArrayList<Libro> libros;
 
     public Biblioteca(String nf) throws IOException, ParsingException {
-        this();
         Builder parser = new Builder();
         Document doc = parser.build(new File(nf));
 
         Elements elLibros = doc.getRootElement().getChildElements();
+
+        libros = new ArrayList<>(elLibros.size());
 
         for (int i = 0; i < elLibros.size(); i++) {
             if (elLibros.get(i).getFirstChildElement(LibroElectronico.Etq.URL.name()) != null) {
@@ -47,10 +49,6 @@ public class Biblioteca {
         libros.add(l);
     }
 
-    public void eliminar(int n) {
-        libros.remove(n);
-    }
-
     public Element toDom() {
         Element biblioteca = new Element(Etq.BIBLIOTECA.name());
         for (Libro l : libros) {
@@ -59,7 +57,7 @@ public class Biblioteca {
         return biblioteca;
     }
 
-    public void toXML(String nombre) throws IOException {
+    public void toXML(String nombre) throws FileNotFoundException, IOException {
         FileOutputStream f = new FileOutputStream(nombre);
         Serializer serial = new Serializer(f);
         Document doc = new Document(this.toDom());
