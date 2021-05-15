@@ -9,9 +9,9 @@ import nu.xom.ParsingException;
 
 public abstract class Cuenta {
 
-    public static enum Etq {
-        NUM_CUENTA, FECHA_APERTURA, CUENTA
-    }
+    private static final String ETQ_NUM_CUENTA = "numCuenta";
+    private static final String ETQ_FECHA_APERTURA = "fechaApertura";
+    private static final String ETQ_CUENTA = "cuenta";
 
     public static enum Tipo {
         AHORRO, CORRIENTE
@@ -28,8 +28,8 @@ public abstract class Cuenta {
     private Fecha fechaApertura;   // Año de apertura de la cuenta
 
     public Cuenta(Element el) throws ParsingException {
-        Element elNumCuenta = el.getFirstChildElement(Etq.NUM_CUENTA.name());
-        Element elFechaApertura = el.getFirstChildElement(Etq.FECHA_APERTURA.name());
+        Element elNumCuenta = el.getFirstChildElement(ETQ_NUM_CUENTA);
+        Element elFechaApertura = el.getFirstChildElement(ETQ_FECHA_APERTURA);
 
         if (elNumCuenta == null) {
             throw new ParsingException("Falta el número de cuenta");
@@ -111,13 +111,13 @@ public abstract class Cuenta {
         return toret.toString();
     }
 
-    public Element toDom() {
-        Element cuenta = new Element(Etq.CUENTA.name());
-        Element elNumCuenta = new Element(Etq.NUM_CUENTA.name());
-        Element elFechaApertura = fechaApertura.toDom();
+    public Element toDOM() {
+        Element cuenta = new Element(ETQ_CUENTA);
+        Element elNumCuenta = new Element(ETQ_NUM_CUENTA);
+        Element elFechaApertura = fechaApertura.toDOM();
 
         elNumCuenta.appendChild(getNumCuenta());
-        elFechaApertura.setLocalName(Etq.FECHA_APERTURA.name());
+        elFechaApertura.setLocalName(ETQ_FECHA_APERTURA);
 
         cuenta.appendChild(elNumCuenta);
         cuenta.appendChild(elFechaApertura);

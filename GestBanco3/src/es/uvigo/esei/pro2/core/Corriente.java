@@ -9,17 +9,17 @@ import nu.xom.ParsingException;
  */
 public class Corriente extends Cuenta {
 
-    public static enum Etq {
-        CUENTA_CORRIENTE, NUM_TARJETA, FECHA_CADUCIDAD
-    }
+    public static final String ETQ_CUENTA_CORRIENTE = "corriente";
+    private static final String ETQ_NUM_TARJETA = "numTarjeta";
+    private static final String ETQ_FECHA_CADUCIDAD = "fechaCaducidad";
 
     private String numeroTarjeta;
     private Fecha fechaCaducidad;
 
     public Corriente(Element el) throws ParsingException {
         super(el);
-        Element elNumTarjeta = el.getFirstChildElement(Etq.NUM_TARJETA.name());
-        Element elFechaCaducidad = el.getFirstChildElement(Etq.FECHA_CADUCIDAD.name());
+        Element elNumTarjeta = el.getFirstChildElement(ETQ_NUM_TARJETA);
+        Element elFechaCaducidad = el.getFirstChildElement(ETQ_FECHA_CADUCIDAD);
 
         if (elNumTarjeta == null) {
             throw new ParsingException("Falta el número de tarjeta");
@@ -91,13 +91,13 @@ public class Corriente extends Cuenta {
     }
 
     @Override
-    public Element toDom() {
-        Element elCuenta = super.toDom();
-        Element elNumTarjeta = new Element(Etq.NUM_TARJETA.name());
-        Element elFechaCaducidad = fechaCaducidad.toDom();
+    public Element toDOM() {
+        Element elCuenta = super.toDOM();
+        Element elNumTarjeta = new Element(ETQ_NUM_TARJETA);
+        Element elFechaCaducidad = fechaCaducidad.toDOM();
 
-        elCuenta.setLocalName(Etq.CUENTA_CORRIENTE.name());
-        elFechaCaducidad.setLocalName(Etq.FECHA_CADUCIDAD.name());
+        elCuenta.setLocalName(ETQ_CUENTA_CORRIENTE);
+        elFechaCaducidad.setLocalName(ETQ_FECHA_CADUCIDAD);
         elNumTarjeta.appendChild(getNumeroTarjeta());
 
         elCuenta.appendChild(elNumTarjeta);

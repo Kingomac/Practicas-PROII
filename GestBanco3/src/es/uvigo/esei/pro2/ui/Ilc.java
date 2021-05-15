@@ -8,7 +8,6 @@ import es.uvigo.esei.pro2.core.Cuenta;
 import es.uvigo.esei.pro2.core.Fecha;
 import excepciones.ClienteIndiceExcepcion;
 import excepciones.CuentaIndiceExcepcion;
-import excepciones.DemasiadosClientesExcepcion;
 import excepciones.FechaFormatoExcepcion;
 import excepciones.SinCuentasExcepcion;
 import java.io.IOException;
@@ -86,8 +85,6 @@ public class Ilc {
                         System.out.println("No es correcta esa opción"
                                 + " ( " + op + " )");
                 }
-            } catch (DemasiadosClientesExcepcion ex) {
-                System.err.println("Número máximo de clientes alcanzados: " + ex.getMessage());
             } catch (SinCuentasExcepcion ex) {
                 System.err.println("El cliente debe tener como mínimo una cuenta");
             } catch (CuentaIndiceExcepcion ex) {
@@ -137,7 +134,7 @@ public class Ilc {
      *
      * @param coleccion La coleccion en la que se inserta el cliente.
      */
-    private void insertaCliente(Banco coleccion) throws DemasiadosClientesExcepcion {
+    private void insertaCliente(Banco coleccion) {
         System.out.println("\n------------");
         System.out.println("\nAlta cliente");
 

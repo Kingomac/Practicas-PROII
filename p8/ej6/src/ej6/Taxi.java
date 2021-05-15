@@ -38,8 +38,8 @@ public class Taxi extends Vehiculo {
     }
 
     @Override
-    public Element toDom() {
-        Element vehiculo = super.toDom();
+    public Element toDOM() {
+        Element vehiculo = super.toDOM();
         Element elNumLicencia = new Element(Etq.NUM_LICENCIA.name());
         elNumLicencia.appendChild(Integer.toString(getNumLicencia()));
         vehiculo.appendChild(elNumLicencia);

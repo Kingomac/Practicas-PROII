@@ -11,9 +11,10 @@ import nu.xom.ParsingException;
  */
 public class Fecha {
 
-    public static enum Etq {
-        FECHA, DIA, MES, ANHO
-    }
+    private static final String ETQ_FECHA = "fecha";
+    private static final String ETQ_DIA = "dia";
+    private static final String ETQ_MES = "mes";
+    private static final String ETQ_ANHO = "anho";
 
     /**
      * Convierte un String que contenga una fecha en formato dd/mm/yyy en una
@@ -69,9 +70,9 @@ public class Fecha {
     private int anho;
 
     public Fecha(Element el) throws ParsingException, NumberFormatException {
-        Element elDia = el.getFirstChildElement(Etq.DIA.name());
-        Element elMes = el.getFirstChildElement(Etq.MES.name());
-        Element elAnho = el.getFirstChildElement(Etq.ANHO.name());
+        Element elDia = el.getFirstChildElement(ETQ_DIA);
+        Element elMes = el.getFirstChildElement(ETQ_MES);
+        Element elAnho = el.getFirstChildElement(ETQ_ANHO);
 
         if (elDia == null) {
             throw new ParsingException("Falta el día");
@@ -194,11 +195,11 @@ public class Fecha {
         return String.format("%d/%d/%d", getDia(), getMes(), getAnho());
     }
 
-    public Element toDom() {
-        Element fecha = new Element(Etq.FECHA.name());
-        Element elDia = new Element(Etq.DIA.name());
-        Element elMes = new Element(Etq.MES.name());
-        Element elAnho = new Element(Etq.ANHO.name());
+    public Element toDOM() {
+        Element fecha = new Element(ETQ_FECHA);
+        Element elDia = new Element(ETQ_DIA);
+        Element elMes = new Element(ETQ_MES);
+        Element elAnho = new Element(ETQ_ANHO);
 
         elDia.appendChild(Integer.toString(getDia()));
         elMes.appendChild(Integer.toString(getMes()));

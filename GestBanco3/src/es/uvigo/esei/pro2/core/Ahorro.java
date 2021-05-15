@@ -10,15 +10,14 @@ import nu.xom.ParsingException;
  */
 public class Ahorro extends Cuenta {
 
-    public static enum Etq {
-        CUENTA_AHORRO, INTERES
-    }
+    public static final String ETQ_CUENTA_AHORRO = "ahorro";
+    private static final String ETQ_INTERES = "interes";
 
     private double interes;
 
     public Ahorro(Element el) throws ParsingException, NumberFormatException {
         super(el);
-        Element elInteres = el.getFirstChildElement(Etq.INTERES.name());
+        Element elInteres = el.getFirstChildElement(ETQ_INTERES);
 
         if (elInteres == null) {
             throw new ParsingException("Falta el interés de la cuenta");
@@ -71,11 +70,11 @@ public class Ahorro extends Cuenta {
     }
 
     @Override
-    public Element toDom() {
-        Element elCuenta = super.toDom();
-        Element elInteres = new Element(Etq.INTERES.name());
+    public Element toDOM() {
+        Element elCuenta = super.toDOM();
+        Element elInteres = new Element(ETQ_INTERES);
 
-        elCuenta.setLocalName(Etq.CUENTA_AHORRO.name());
+        elCuenta.setLocalName(ETQ_CUENTA_AHORRO);
         elInteres.appendChild(Double.toString(getInteres()));
 
         elCuenta.appendChild(elInteres);

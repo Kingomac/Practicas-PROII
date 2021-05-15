@@ -45,8 +45,8 @@ public class Autobus extends Vehiculo {
     }
 
     @Override
-    public Element toDom() {
-        Element vehiculo = super.toDom();
+    public Element toDOM() {
+        Element vehiculo = super.toDOM();
         Element elNumPlazas = new Element(Etq.NUM_PLAZAS.name());
 
         elNumPlazas.appendChild(Integer.toString(getNumPlazas()));

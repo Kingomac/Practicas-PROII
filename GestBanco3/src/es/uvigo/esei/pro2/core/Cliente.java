@@ -12,9 +12,11 @@ import nu.xom.ParsingException;
 
 public class Cliente {
 
-    public static enum Etq {
-        CLIENTE, DNI, NOMBRE, DOMICILIO, CUENTAS
-    }
+    private static final String ETQ_CLIENTE = "cliente";
+    private static final String ETQ_DNI = "dni";
+    private static final String ETQ_NOMBRE = "nombre";
+    private static final String ETQ_DOMICILIO = "domicilio";
+    private static final String ETQ_CUENTAS = "cuentas";
 
     private String dni;             // D.N.I. del cliente
     private String nombre;          // Nombre del cliente
@@ -22,10 +24,10 @@ public class Cliente {
     private ArrayList<Cuenta> cuentas;     // Cuentas bancarias del cliente
 
     public Cliente(Element el) throws ParsingException {
-        Element elDni = el.getFirstChildElement(Etq.DNI.name());
-        Element elNombre = el.getFirstChildElement(Etq.NOMBRE.name());
-        Element elDomicilio = el.getFirstChildElement(Etq.DOMICILIO.name());
-        Element elCuentas = el.getFirstChildElement(Etq.CUENTAS.name());
+        Element elDni = el.getFirstChildElement(ETQ_DNI);
+        Element elNombre = el.getFirstChildElement(ETQ_NOMBRE);
+        Element elDomicilio = el.getFirstChildElement(ETQ_DOMICILIO);
+        Element elCuentas = el.getFirstChildElement(ETQ_CUENTAS);
         Elements elsCuenta;
 
         if (elDni == null) {
@@ -49,7 +51,7 @@ public class Cliente {
         cuentas = new ArrayList<>(elsCuenta.size());
 
         for (Element e : elsCuenta) {
-            if (e.getLocalName().equals(Ahorro.Etq.CUENTA_AHORRO.name())) {
+            if (e.getLocalName().equals(Ahorro.ETQ_CUENTA_AHORRO)) {
                 cuentas.add(new Ahorro(e));
             } else {
                 cuentas.add(new Corriente(e));
@@ -199,18 +201,18 @@ public class Cliente {
     }
 
     public Element toDom() {
-        Element elCliente = new Element(Etq.CLIENTE.name());
-        Element elDNI = new Element(Etq.DNI.name());
-        Element elNombre = new Element(Etq.NOMBRE.name());
-        Element elDomicilio = new Element(Etq.DOMICILIO.name());
-        Element elCuentas = new Element(Etq.CUENTAS.name());
+        Element elCliente = new Element(ETQ_CLIENTE);
+        Element elDNI = new Element(ETQ_DNI);
+        Element elNombre = new Element(ETQ_NOMBRE);
+        Element elDomicilio = new Element(ETQ_DOMICILIO);
+        Element elCuentas = new Element(ETQ_CUENTAS);
 
         elDNI.appendChild(getDni());
         elNombre.appendChild(getNombre());
         elDomicilio.appendChild(getDomicilio());
 
         for (Cuenta c : cuentas) {
-            elCuentas.appendChild(c.toDom());
+            elCuentas.appendChild(c.toDOM());
         }
 
         elCliente.appendChild(elDNI);

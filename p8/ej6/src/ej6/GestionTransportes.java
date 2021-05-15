@@ -65,17 +65,17 @@ public class GestionTransportes {
         return toret.toString();
     }
 
-    public Element toDom() {
+    public Element toDOM() {
         Element elVehiculos = new Element(Etq.VEHICULOS.name());
         for (Vehiculo c : this.vehiculos) {
-            elVehiculos.appendChild(c.toDom());
+            elVehiculos.appendChild(c.toDOM());
         }
         return elVehiculos;
     }
 
     public void toXML(String nf) throws IOException, FileNotFoundException {
         FileOutputStream f = new FileOutputStream(nf);
-        Document doc = new Document(this.toDom());
+        Document doc = new Document(this.toDOM());
         Serializer serial = new Serializer(f);
         serial.write(doc);
         f.close();

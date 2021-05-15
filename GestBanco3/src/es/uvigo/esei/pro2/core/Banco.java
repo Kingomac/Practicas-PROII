@@ -20,9 +20,9 @@ import nu.xom.Serializer;
 
 public class Banco {
 
-    public static enum Etq {
-        BANCO, NOMBRE, CLIENTES
-    }
+    private static final String ETQ_BANCO = "banco";
+    private static final String ETQ_NOMBRE = "nombre";
+    private static final String ETQ_CLIENTES = "clientes";
 
     private String nombre;
     private final ArrayList<Cliente> clientes; // Array de los clientes del banco
@@ -35,8 +35,8 @@ public class Banco {
         Builder parser = new Builder();
         Document doc = parser.build(new File(nf));
         Element elBanco = doc.getRootElement();
-        Element elNombre = elBanco.getFirstChildElement(Etq.NOMBRE.name());
-        Element elClientes = elBanco.getFirstChildElement(Etq.CLIENTES.name());
+        Element elNombre = elBanco.getFirstChildElement(ETQ_NOMBRE);
+        Element elClientes = elBanco.getFirstChildElement(ETQ_CLIENTES);
         Elements elsClientes;
 
         if (elNombre == null) {
@@ -191,10 +191,10 @@ public class Banco {
         return toret.toString();
     }
 
-    public Element toDom() {
-        Element elBanco = new Element(Etq.BANCO.name());
-        Element elNombre = new Element(Etq.NOMBRE.name());
-        Element elClientes = new Element(Etq.CLIENTES.name());
+    public Element toDOM() {
+        Element elBanco = new Element(ETQ_BANCO);
+        Element elNombre = new Element(ETQ_NOMBRE);
+        Element elClientes = new Element(ETQ_CLIENTES);
 
         elNombre.appendChild(getNombre());
         for (Cliente c : clientes) {
@@ -210,7 +210,7 @@ public class Banco {
     public void toXml(String nf) throws FileNotFoundException, IOException {
         FileOutputStream f = new FileOutputStream(nf);
         Serializer serial = new Serializer(f);
-        Document doc = new Document(this.toDom());
+        Document doc = new Document(this.toDOM());
         serial.write(doc);
         f.close();
     }

@@ -107,21 +107,21 @@ public class Fecha {
         return String.format("%d/%d/%d", getDia(), getMes(), getAnho());
     }
 
-    public Element toDom() {
-        Element fecha = new Element(Etq.FECHA.name());
-        Element dia = new Element(Etq.DIA.name());
-        Element mes = new Element(Etq.MES.name());
-        Element anho = new Element(Etq.ANHO.name());
+    public Element toDOM() {
+        Element elFecha = new Element(Etq.FECHA.name());
+        Element elDia = new Element(Etq.DIA.name());
+        Element elMes = new Element(Etq.MES.name());
+        Element elAnho = new Element(Etq.ANHO.name());
 
-        dia.appendChild(Integer.toString(getDia()));
-        mes.appendChild(Integer.toString(getMes()));
-        anho.appendChild(Integer.toString(getAnho()));
+        elDia.appendChild(Integer.toString(getDia()));
+        elMes.appendChild(Integer.toString(getMes()));
+        elAnho.appendChild(Integer.toString(getAnho()));
 
-        fecha.appendChild(dia);
-        fecha.appendChild(mes);
-        fecha.appendChild(anho);
+        elFecha.appendChild(elDia);
+        elFecha.appendChild(elMes);
+        elFecha.appendChild(elAnho);
 
-        return fecha;
+        return elFecha;
     }
 
 }

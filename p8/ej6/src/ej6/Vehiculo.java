@@ -14,7 +14,7 @@ public abstract class Vehiculo {
     }
 
     public static enum Etq {
-        VEHICULO, MATRICULA, MARCA, MODELO
+        VEHICULO, MATRICULA, MARCA, MODELO, FECHA_MATRICULACION
     }
 
     private String matricula;
@@ -26,7 +26,7 @@ public abstract class Vehiculo {
         Element elMatricula = el.getFirstChildElement(Etq.MATRICULA.name());
         Element elMarca = el.getFirstChildElement(Etq.MARCA.name());
         Element elModelo = el.getFirstChildElement(Etq.MODELO.name());
-        Element elFechaMatriculacion = el.getFirstChildElement(Fecha.Etq.FECHA.name());
+        Element elFechaMatriculacion = el.getFirstChildElement(Etq.FECHA_MATRICULACION.name());
 
         if (elMatricula == null) {
             throw new ParsingException("Falta la matrícula");
@@ -97,20 +97,22 @@ public abstract class Vehiculo {
         return sb.toString();
     }
 
-    public Element toDom() {
+    public Element toDOM() {
         Element vehiculo = new Element(Etq.VEHICULO.name());
         Element elMatricula = new Element(Etq.MATRICULA.name());
         Element elMarca = new Element(Etq.MARCA.name());
         Element elModelo = new Element(Etq.MODELO.name());
+        Element elFechaMatriculacion = fechaMatriculacion.toDOM();
 
         elMatricula.appendChild(getMatricula());
         elMarca.appendChild(getMarca());
         elModelo.appendChild(getModelo());
+        elFechaMatriculacion.setLocalName(Etq.FECHA_MATRICULACION.name());
 
         vehiculo.appendChild(elMatricula);
         vehiculo.appendChild(elMarca);
         vehiculo.appendChild(elModelo);
-        vehiculo.appendChild(fechaMatriculacion.toDom());
+        vehiculo.appendChild(elFechaMatriculacion);
 
         return vehiculo;
     }
